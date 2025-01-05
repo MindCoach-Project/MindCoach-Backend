@@ -1,0 +1,39 @@
+# Ignore build output
+**/bin/
+**/obj/
+**/*.csproj.lock
+# Ignore solution files
+*.sln
+*.user
+*.suo
+
+# Ignore NuGet packages
+**/*.nupkg
+**/*.snupkg
+packages/
+**/*.nuspec
+
+# Ignore test results and logs
+TestResults/
+**/*.log
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+**/*.sln.dotnet
+**/*.userprefs
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore debugging and temporary files
+**/*.pdb
+**/*.mdb
+**/*.swp
+
+#ignore env
+./MinhCoach.Api/appsettings.json
+./MinhCoach.Api/appsettings.Development.json
+./MinhCoach.Api/appsettings.Production.json
+./MinhCoach.Api/appsettings.Staging.json
