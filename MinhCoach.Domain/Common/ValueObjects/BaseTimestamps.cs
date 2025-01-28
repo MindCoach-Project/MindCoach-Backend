@@ -8,6 +8,7 @@ public abstract class BaseTimestamps
     protected BaseTimestamps(DateTime createdAt)
     {
         CreatedAt = createdAt;
+        UpdatedAt = null;
     }
 
     public void UpdateTimestamp()
