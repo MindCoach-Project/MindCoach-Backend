@@ -3,8 +3,13 @@ namespace MinhCoach.Contracts.Authentication;
 public record AuthenticationResponse
 (
     Guid Id,
-    string FirstName,
-    string LastName,
+    string Username,
+    string Phone,
+    string Address,
+    string ImageUrl,
     string Email,
-    string Token
+    string Token,
+    DateTime CreatedAt,
+    DateTime? UpdatedAt,
+    DateTime? DeletedAt
 );
