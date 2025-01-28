@@ -1,43 +1,20 @@
 using MinhCoach.Domain.Common.Models;
+using MinhCoach.Domain.Common.ValueObjects;
 using MinhCoach.Domain.Models.ValueObjects;
 
 namespace MinhCoach.Domain.User;
 
 public sealed class User : Model<UserId, Guid>
 {
-    public string FirstName { get;set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public string Username { get; private set; }
+    public string Phone { get; private set; }
+    public string Address { get; private set; }
+    public string Email { get; private set; }
+    public string Password { get; private set; }
+    public string ImageUrl { get; private set; }
     
-    public User(
-        UserId id, 
-        string email, 
-        string password, 
-        string lastName, 
-        string firstName)
-        : base(id)
-    {
-        Email = email;
-        Password = password;
-        LastName = lastName;
-        FirstName = firstName;
-    }
-    
-    public static User Create(
-        string email,
-        string password,
-        string lastName,
-        string firstName)
-    {
-        return new(
-            UserId.CreateUnique(),
-            email,
-            password,
-            lastName,
-            firstName
-        );
-    }
+    public FullTimestamps Timestamps { get; private set; }
+   
 #pragma warning disable CS8618
     private User()
     {
