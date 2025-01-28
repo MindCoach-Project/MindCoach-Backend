@@ -34,8 +34,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.UniqueName, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.Username),        
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),              
+            new Claim( "username", user.Username),        
+            new Claim("email", user.Email),              
             new Claim("phone", user.Phone ?? string.Empty),                      
             new Claim("address", user.Address ?? string.Empty),             
             new Claim("imageUrl", user.ImageUrl ?? string.Empty),                
@@ -44,7 +44,6 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim("deletedAt", user.Timestamps.DeletedAt?.ToString("o") ?? string.Empty),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
-
         
         var securityToken = new JwtSecurityToken(
             issuer: _jwtSetting.Issuer,
