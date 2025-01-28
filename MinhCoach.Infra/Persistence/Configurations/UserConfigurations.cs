@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MinhCoach.Domain.Models.ValueObjects;
 using MinhCoach.Domain.User;
+using MinhCoach.Infra.Enums;
 
 namespace MinhCoach.Infra.Persistence.Configurations;
 
@@ -24,16 +25,43 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
                 id => id.Value,
                 value => UserId.Create(value));
             
-        builder.Property(m => m.LastName)
-            .HasMaxLength(100);
+        builder.Property(m => m.Username)
+            .HasMaxLength(100)
+            .IsRequired(false);  
 
-        builder.Property(m => m.FirstName)
-            .HasMaxLength(100);
+        builder.Property(m => m.Phone)
+            .HasMaxLength(100)
+            .IsRequired(false);  
+        
+        builder.Property(m => m.Address)
+            .HasMaxLength(100)
+            .IsRequired(false);
 
         builder.Property(m => m.Password)
             .HasMaxLength(100);
+        
+        builder.HasIndex(m => m.Email)
+            .IsUnique();
 
         builder.Property(m => m.Email)
-            .HasMaxLength(100);
+            .HasMaxLength(100);      
+        
+        builder.Property(m => m.ImageUrl)
+            .HasMaxLength(100)
+            .HasDefaultValue("/images/users/default-user.png");
+        
+        builder.OwnsOne(m => m.Timestamps, timestamps =>
+        {
+            timestamps.Property(t => t.CreatedAt)
+                .HasColumnName(TimeColumnNames.CreatedAt.ToString());
+
+            timestamps.Property(t => t.UpdatedAt)
+                .HasColumnName(TimeColumnNames.UpdatedAt.ToString()) 
+                .IsRequired(false);
+
+            timestamps.Property(t => t.DeletedAt)
+                .HasColumnName(TimeColumnNames.DeletedAt.ToString()) 
+                .IsRequired(false);
+        });
     }
 }
