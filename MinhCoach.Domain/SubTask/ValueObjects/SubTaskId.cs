@@ -1,26 +1,26 @@
 using MinhCoach.Domain.Common.Models;
 
-namespace MinhCoach.Domain.User.ValueObjects;
+namespace MinhCoach.Domain.SubTask.ValueObjects;
 
-public class UserId : ModelId<Guid>
+public class SubTaskId : ModelId<Guid>
 {
     public override Guid Value { get; protected set; }
-    private UserId(Guid value)
+    private SubTaskId(Guid value)
     {
         Value = value;
     }
     
-    public static UserId CreateUnique()
+    public static SubTaskId CreateUnique()
     {
         return new(Guid.NewGuid());
     }
     
-    public static UserId Create(string id)
+    public static SubTaskId Create(string id)
     {
         return new(Guid.Parse(id));
     }
     
-    public static UserId Create(Guid id)
+    public static SubTaskId Create(Guid id)
     {
         return new(id);
     }

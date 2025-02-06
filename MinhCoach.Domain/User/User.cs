@@ -1,6 +1,6 @@
 using MinhCoach.Domain.Common.Models;
 using MinhCoach.Domain.Common.ValueObjects;
-using MinhCoach.Domain.Models.ValueObjects;
+using MinhCoach.Domain.User.ValueObjects;
 
 namespace MinhCoach.Domain.User;
 

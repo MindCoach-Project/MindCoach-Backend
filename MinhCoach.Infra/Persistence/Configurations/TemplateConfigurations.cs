@@ -1,21 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MinhCoach.Domain.User;
+using MinhCoach.Domain.Template;
+using MinhCoach.Domain.Template.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
 using MinhCoach.Infra.Enums;
 
 namespace MinhCoach.Infra.Persistence.Configurations;
 
-public class UserConfigurations : IEntityTypeConfiguration<User>
+public class TemplateConfigurations : IEntityTypeConfiguration<Template>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<Template> builder)
     {
-        ConfigureUsersTable(builder);
+        ConfigureTemplatesTable(builder);
     }
 
-    public void ConfigureUsersTable(EntityTypeBuilder<User> builder)
+    public void ConfigureTemplatesTable(EntityTypeBuilder<Template> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable("Templates");
         
         builder.HasKey(x => x.Id);
 
@@ -23,35 +24,24 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .ValueGeneratedNever()
             .HasConversion(
                 id => id.Value,
-                value => UserId.Create(value));
-            
-        builder.Property(m => m.Username)
-            .HasMaxLength(100)
-            .IsRequired(false);  
+                value => TemplateId.Create(value));
 
-        builder.Property(m => m.Phone)
+        builder.Property(m => m.Name)
             .HasMaxLength(100)
-            .IsRequired(false);  
+            .IsRequired();
         
-        builder.Property(m => m.Address)
-            .HasMaxLength(100)
+        builder.Property(m => m.Description)
             .IsRequired(false);
 
-        builder.Property(m => m.Password)
-            .HasMaxLength(100)
+        builder.Property(m => m.IsPrivateTemplate)
+            .HasDefaultValue(false)
             .IsRequired();
         
-        builder.HasIndex(m => m.Email)
-            .IsUnique();
-
-        builder.Property(m => m.Email)
-            .HasMaxLength(100)
-            .IsRequired();
-        
-        builder.Property(m => m.ImageUrl)
-            .HasMaxLength(100)
-            .HasDefaultValue("/images/users/default-user.png")
-            .IsRequired();
+        builder.Property(x => x.UserId)
+            .HasConversion(
+                id => id.Value,
+                value => UserId.Create(value))
+             .IsRequired(false);
         
         builder.OwnsOne(m => m.Timestamps, timestamps =>
         {

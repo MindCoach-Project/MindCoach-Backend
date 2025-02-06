@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Interfaces.Services;
-using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.Infra.Authentication;

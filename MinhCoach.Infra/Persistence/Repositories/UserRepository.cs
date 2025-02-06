@@ -1,5 +1,4 @@
 using MinhCoach.App.Common.Persistence;
-using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.Infra.Persistence.Repositories;

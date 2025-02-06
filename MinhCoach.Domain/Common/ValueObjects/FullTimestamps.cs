@@ -13,4 +13,11 @@ public class FullTimestamps : BaseTimestamps
     {
         DeletedAt = DateTime.UtcNow;
     }
+    
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return CreatedAt;
+        yield return UpdatedAt;
+        yield return DeletedAt;
+    }
 }
