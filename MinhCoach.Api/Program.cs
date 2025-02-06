@@ -12,10 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
-    app.UseHttpsRedirection();  
+    app.UseHttpsRedirection(); 
     
     app.UseAuthentication();
     app.UseAuthorization();
+    
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
     
     app.MapControllers();
     app.Run();
