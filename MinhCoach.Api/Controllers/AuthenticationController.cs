@@ -6,7 +6,7 @@ using MediatR;
 using ErrorOr;
 using MinhCoach.App.Authentication.Commands.Register;
 using MinhCoach.App.Authentication.Common;
-// using MinhCoach.App.Authentication.Queries.Login;
+using MinhCoach.App.Authentication.Queries.Login;
 
 namespace MinhCoach.Api.Controllers;
 
@@ -32,13 +32,13 @@ public class AuthenticationController : ApiController
             authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
             errors => Problem(errors));
     }
-    // [HttpPost("login")]
-    // public async Task<IActionResult> Login(LoginRequest req)
-    // {
-    //     var query = _mapper.Map<LoginQuery>(req);
-    //     ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
-    //     return authResult.Match(
-    //         authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
-    //         errors => Problem(errors));
-    // }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest req)
+    {
+        var query = _mapper.Map<LoginQuery>(req);
+        ErrorOr<AuthenticationResult> authResult = await _mediator.Send(query);
+        return authResult.Match(
+            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+            errors => Problem(errors));
+    }
 }
