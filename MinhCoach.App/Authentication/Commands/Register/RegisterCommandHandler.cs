@@ -3,6 +3,7 @@ using ErrorOr;
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Errors;
 using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
@@ -10,7 +11,7 @@ using MinhCoach.Domain.User;
 namespace MinhCoach.App.Authentication.Commands.Register;
 
 public class RegisterCommandHandler :
-    IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
+    IRequestHandler<RegisterCommand, ErrorOr<ObjectResponse<AuthenticationResult>>>
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
@@ -25,7 +26,7 @@ public class RegisterCommandHandler :
         _userRepository = userRepository;
     }
     
-    public async Task<ErrorOr<AuthenticationResult>> Handle(
+    public async Task<ErrorOr<ObjectResponse<AuthenticationResult>>> Handle(
         RegisterCommand command,
         CancellationToken cancellationToken)
     {   
@@ -49,9 +50,12 @@ public class RegisterCommandHandler :
         //create jwt token
         string token = _jwtTokenGenerator.GenerateToken(user);
         
-        return new AuthenticationResult(
-            user,
-            token);
+        return new ObjectResponse<AuthenticationResult>(
+            "Registration successful, please confirm your email.", 
+            new AuthenticationResult(
+                user,
+                token)
+        );
     }
 
 }

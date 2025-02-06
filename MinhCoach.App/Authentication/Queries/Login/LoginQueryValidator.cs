@@ -12,10 +12,12 @@ public class LoginQueryValidator : AbstractValidator<LoginQuery>
 
          RuleFor(x => x.Password)
              .NotEmpty().WithMessage("Password is required.")
-             .Length(6, 100).WithMessage("Password must be between 6 and 100 characters.")
-             .Matches("[A-Z]").WithMessage("Password must contain at least one uppercase letter.")
-             .Matches("[a-z]").WithMessage("Password must contain at least one lowercase letter.")
-             .Matches("[0-9]").WithMessage("Password must contain at least one number.")
-             .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain at least one special character.");
+             .Must(password => 
+                 password.Length >= 8 &&
+                 password.Any(char.IsUpper) &&
+                 password.Any(char.IsLower) &&
+                 password.Any(char.IsDigit) &&
+                 password.Any(ch => !char.IsLetterOrDigit(ch))
+             ).WithMessage("Password must have at least 8 characters, including letters, numbers, and special characters.");
      }
  }
