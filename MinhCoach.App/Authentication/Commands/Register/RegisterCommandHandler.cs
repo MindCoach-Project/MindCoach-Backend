@@ -5,7 +5,6 @@ using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Errors;
-using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.App.Authentication.Commands.Register;

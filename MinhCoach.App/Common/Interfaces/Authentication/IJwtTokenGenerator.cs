@@ -1,4 +1,3 @@
-using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.App.Common.Interfaces.Authentication;
