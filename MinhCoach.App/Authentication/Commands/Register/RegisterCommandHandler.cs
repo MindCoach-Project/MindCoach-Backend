@@ -43,7 +43,6 @@ public class RegisterCommandHandler :
             hashedPassword
             );
 
-        // _userRepository.Add(user);
         _userRepository.Add(user);
         
         //create jwt token

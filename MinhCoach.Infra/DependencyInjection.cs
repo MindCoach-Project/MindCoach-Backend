@@ -37,6 +37,7 @@ public static class DependencyInjection
         services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(O => O.TokenValidationParameters = new TokenValidationParameters()
             {
@@ -57,6 +58,7 @@ public static class DependencyInjection
         ConfigurationManager configuration)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
         
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MindCoachDbContext>(options =>

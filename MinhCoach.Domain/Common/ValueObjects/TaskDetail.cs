@@ -11,7 +11,34 @@ public class TaskDetail : ValueObject
     public TaskStatuses Status { get; private set; }
     public DateTime? StartTime { get; private set; }
     public DateTime? EndTime { get; private set; }
+    public TaskDetail(
+        string title, 
+        string description, 
+        TaskStatuses status, 
+        DateTime? startTime, 
+        DateTime? endTime)
+    {
+        Title = title;
+        Description = description;
+        Status = status;
+        StartTime = startTime;
+        EndTime = endTime;
+    }
     
+    public static TaskDetail Create(
+        string title, 
+        string? description, 
+        DateTime startTime, 
+        DateTime endTime)
+    {
+        return new TaskDetail(
+            title,
+            description ?? string.Empty,  
+            TaskStatuses.Todo,     
+            startTime,
+            endTime
+        );
+    } 
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Title;
