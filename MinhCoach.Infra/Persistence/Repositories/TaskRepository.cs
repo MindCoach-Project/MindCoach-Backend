@@ -16,7 +16,9 @@ public class TaskRepository : ITaskRepository
     
     public async Task<TaskEntity?> FindByIdAsync(TaskId taskId)
     {
-        return await _dbContext.Tasks.SingleOrDefaultAsync(t => t.Id == taskId);
+        return await _dbContext.Tasks.SingleOrDefaultAsync(
+            t => t.Id == taskId && 
+                 t.Timestamps.DeletedAt == null);
     }
     
     public async Task AddAsync(TaskEntity task)
@@ -30,4 +32,5 @@ public class TaskRepository : ITaskRepository
          _dbContext.Tasks.Update(task);
         await  _dbContext.SaveChangesAsync();
     }
+    
 }

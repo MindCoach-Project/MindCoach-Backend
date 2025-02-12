@@ -60,7 +60,7 @@ public sealed class Task : Model<TaskId, Guid>
             null
         );
     }
-
+    
     public void Update(
         string title,
         string? description,
@@ -69,7 +69,7 @@ public sealed class Task : Model<TaskId, Guid>
         DateTime endTime
         )
     {
-        Timestamps.UpdateTimestamp();
+        Timestamps = Timestamps.UpdateTimestamp();
         
         TaskDetail = TaskDetail.Update(
             title,
@@ -79,6 +79,11 @@ public sealed class Task : Model<TaskId, Guid>
         
         if (!string.IsNullOrEmpty(priority) && Enum.TryParse(priority, true, out Priorities parsedPriority))
             Priority = parsedPriority;
+    }
+    
+    public void SoftDelete()
+    {
+        Timestamps = Timestamps.MarkAsDeleted();
     }
     
 #pragma warning disable CS8618

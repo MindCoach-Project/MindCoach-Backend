@@ -1,5 +1,6 @@
 using Mapster;
 using MinhCoach.App.TaskManagement.Commands.CreateTask;
+using MinhCoach.App.TaskManagement.Commands.DeleteTask;
 using MinhCoach.App.TaskManagement.Commands.UpdateTask;
 using MinhCoach.App.TaskManagement.Common;
 using MinhCoach.Contracts.TaskManagement;
@@ -15,6 +16,9 @@ public class TaskManagementMappingConfig : IRegister
         config.NewConfig<(UpdateTaskRequest req, Guid taskId), UpdateTaskCommand>()
             .Map(d => d.TaskId, s => s.taskId)
             .Map(d => d, s => s.req);
+
+        config.NewConfig<Guid, DeleteTaskCommand>()
+            .Map(d => d.TaskId, s => s);
         
         config.NewConfig<CUDTaskResult, CUDTaskResponse>()
             .Map(d => d.Id, s => s.Task.Id.Value)

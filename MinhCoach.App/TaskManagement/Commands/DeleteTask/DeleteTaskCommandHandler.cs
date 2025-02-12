@@ -9,15 +9,15 @@ using MinhCoach.App.TaskManagement.Common;
 using MinhCoach.Domain.Task.ValueObjects;
 using Task = MinhCoach.Domain.Task;
 
-namespace MinhCoach.App.TaskManagement.Commands.UpdateTask;
+namespace MinhCoach.App.TaskManagement.Commands.DeleteTask;
 
-public class UpdateTaskCommandHandler :
-    IRequestHandler<UpdateTaskCommand, ErrorOr<ObjectResponse<CUDTaskResult>>>
+public class DeleteTaskCommandHandler :
+    IRequestHandler<DeleteTaskCommand, ErrorOr<ObjectResponse<CUDTaskResult>>>
 {
     private readonly ITaskRepository _taskRepository;
     private readonly ITokenService _tokenService;
     
-    public UpdateTaskCommandHandler(
+    public DeleteTaskCommandHandler(
         ITaskRepository taskRepository,
         ITokenService tokenService)
     {
@@ -26,7 +26,7 @@ public class UpdateTaskCommandHandler :
     }
     
     public async Task<ErrorOr<ObjectResponse<CUDTaskResult>>> Handle(
-        UpdateTaskCommand command,
+        DeleteTaskCommand command,
         CancellationToken cancellationToken)
     {   
         //get userid from token
@@ -35,7 +35,7 @@ public class UpdateTaskCommandHandler :
         {
             return AErrors.Authentication.UserIdFromTokenNotFound;
         }
-    
+        Console.Write(command.TaskId);
        //check task exist
        if (await  _taskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task.Task task)
            return Errors.Task.NotFound;
@@ -45,18 +45,12 @@ public class UpdateTaskCommandHandler :
            return Errors.Task.UnauthorizedAccess;
        
        
-      //update task
-      task.Update(
-          command.Title,
-          command.Description,
-          command.Priority,
-          command.EndTime,
-          command.StartTime);
-        
+      //delete task
+      task.SoftDelete();
       await _taskRepository.UpdateAsync(task);
       
       return new ObjectResponse<CUDTaskResult>(
-          "Task updated! Your task is now in the list.",
+          "Task deleted!.",
           new CUDTaskResult(task)
       );
     }
