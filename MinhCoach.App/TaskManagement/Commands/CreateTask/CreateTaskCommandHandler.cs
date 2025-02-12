@@ -44,7 +44,7 @@ public class CreateTaskCommandHandler :
           command.EndTime,
           userId);
         
-      _taskRepository.Add(task);
+      _taskRepository.AddAsync(task);
       
       return new ObjectResponse<CUDTaskResult>(
           "Task created! Your task is now in the list.",

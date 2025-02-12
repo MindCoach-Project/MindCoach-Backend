@@ -1,5 +1,6 @@
 using Mapster;
 using MinhCoach.App.TaskManagement.Commands.CreateTask;
+using MinhCoach.App.TaskManagement.Commands.UpdateTask;
 using MinhCoach.App.TaskManagement.Common;
 using MinhCoach.Contracts.TaskManagement;
 
@@ -9,7 +10,11 @@ public class TaskManagementMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<(CreateTaskRequest req, Guid userId), CreateTaskCommand>();
+        config.NewConfig<CreateTaskRequest, CreateTaskCommand>();
+        
+        config.NewConfig<(UpdateTaskRequest req, Guid taskId), UpdateTaskCommand>()
+            .Map(d => d.TaskId, s => s.taskId)
+            .Map(d => d, s => s.req);
         
         config.NewConfig<CUDTaskResult, CUDTaskResponse>()
             .Map(d => d.Id, s => s.Task.Id.Value)

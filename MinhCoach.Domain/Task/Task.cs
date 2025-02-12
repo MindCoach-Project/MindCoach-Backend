@@ -1,3 +1,4 @@
+using ErrorOr;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Models;
 using MinhCoach.Domain.Common.ValueObjects;
@@ -58,6 +59,26 @@ public sealed class Task : Model<TaskId, Guid>
             UserId.Create(userId),
             null
         );
+    }
+
+    public void Update(
+        string title,
+        string? description,
+        string? priority,
+        DateTime startTime,
+        DateTime endTime
+        )
+    {
+        Timestamps.UpdateTimestamp();
+        
+        TaskDetail = TaskDetail.Update(
+            title,
+            description,
+            startTime,
+            endTime);
+        
+        if (!string.IsNullOrEmpty(priority) && Enum.TryParse(priority, true, out Priorities parsedPriority))
+            Priority = parsedPriority;
     }
     
 #pragma warning disable CS8618

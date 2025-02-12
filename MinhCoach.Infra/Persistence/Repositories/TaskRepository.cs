@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using MinhCoach.App.Common.Persistence;
-using Task = MinhCoach.Domain.Task.Task;
+using MinhCoach.Domain.Task.ValueObjects;
+using TaskEntity = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.Infra.Persistence.Repositories;
 
@@ -11,9 +13,21 @@ public class TaskRepository : ITaskRepository
     {
         _dbContext = dbContext;
     }
-    public void Add(Task task)
+    
+    public async Task<TaskEntity?> FindByIdAsync(TaskId taskId)
     {
-        _dbContext.Tasks.Add(task);
-        _dbContext.SaveChanges();
+        return await _dbContext.Tasks.SingleOrDefaultAsync(t => t.Id == taskId);
+    }
+    
+    public async Task AddAsync(TaskEntity task)
+    {
+        await  _dbContext.Tasks.AddAsync(task);
+        await  _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(TaskEntity task)
+    {
+         _dbContext.Tasks.Update(task);
+        await  _dbContext.SaveChangesAsync();
     }
 }
