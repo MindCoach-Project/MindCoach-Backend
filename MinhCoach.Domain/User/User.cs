@@ -4,7 +4,7 @@ using MinhCoach.Domain.User.ValueObjects;
 
 namespace MinhCoach.Domain.User;
 
-public sealed class User : Model<UserId, Guid>
+public sealed class  User : Model<UserId, Guid>
 {
     public string Username { get; private set; }
     public string Phone { get; private set; }

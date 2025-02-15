@@ -7,15 +7,15 @@ public class BaseTimestamps : ValueObject
     public DateTime CreatedAt { get; protected set; }
     public DateTime? UpdatedAt { get; protected set; }
 
-    protected BaseTimestamps(DateTime createdAt)
+    protected BaseTimestamps(DateTime createdAt, DateTime? updatedAt = null)
     {
         CreatedAt = createdAt;
-        UpdatedAt = null;
+        UpdatedAt = updatedAt;
     }
 
-    public void UpdateTimestamp()
+    public BaseTimestamps UpdateTimestamp()
     {
-        UpdatedAt = DateTime.UtcNow;
+        return new BaseTimestamps(CreatedAt, DateTime.UtcNow);
     }
     
     public override IEnumerable<object> GetEqualityComponents()

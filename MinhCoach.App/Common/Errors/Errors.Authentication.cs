@@ -15,5 +15,9 @@ public static partial class Errors
                 { "IsValidationError", false }
             }
         );
+        public static Error UserIdFromTokenNotFound => Error.Unauthorized(
+            code: "Auth.UserIdFromTokenNotFound",
+            description: "User Id is missing from token."
+        );
     }
 }

@@ -12,6 +12,8 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         
+        services.AddHttpContextAccessor();
+        
         services.AddSingleton<ProblemDetailsFactory, MinhCoachProblemDetailsFactory>();
         services.AddMappings();
         
