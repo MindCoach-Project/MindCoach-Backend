@@ -8,14 +8,15 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     {
         Id = id;
     }
-    public override bool Equals(object? obj)
-    {
-        return obj is Entity<TId> entity && Id.Equals(entity.Id);
-    }
-
+    
     public bool Equals(Entity<TId>? other)
     {
         return Equals((object?) other);
+    }
+    
+    public override bool Equals(object? obj)
+    {
+        return obj is Entity<TId> entity && Id.Equals(entity.Id);
     }
 
     public static bool operator ==(Entity<TId> left, Entity<TId> right)

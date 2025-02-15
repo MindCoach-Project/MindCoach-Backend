@@ -6,7 +6,7 @@ using MinhCoach.Domain.SubTask;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.Template.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
-using MinhCoach.Infra.Common.Utilities;
+using MinhCoach.Domain.Common.Utilities;
 using MinhCoach.Infra.Enums;
 using Task = MinhCoach.Domain.Task.Task;
 

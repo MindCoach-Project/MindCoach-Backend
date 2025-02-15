@@ -18,7 +18,9 @@ public class ApiController : ControllerBase
 
         if (errors.All(e => 
                 e.Type == ErrorType.Validation &&
-                (e.Metadata != null && e.Metadata.TryGetValue("IsValidationError", out var isValidation) ? (bool)isValidation : true)))
+                (e.Metadata != null && 
+                 e.Metadata.TryGetValue("IsValidationError", out var isValidation) 
+                    ? (bool)isValidation : true)))
         {
             return ValidationProblem(errors);
         }

@@ -4,13 +4,12 @@ using MinhCoach.App.Common.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
-using MinhCoach.App.TaskManagement.Common;
-using Task = MinhCoach.Domain.Task;
+using Task = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.App.TaskManagement.Commands.CreateTask;
 
 public class CreateTaskCommandHandler :
-    IRequestHandler<CreateTaskCommand, ErrorOr<ObjectResponse<CUDTaskResult>>>
+    IRequestHandler<CreateTaskCommand, ErrorOr<ObjectResponse<Task>>>
 {
     private readonly ITaskRepository _taskRepository;
     private readonly ITokenService _tokenService;
@@ -23,7 +22,7 @@ public class CreateTaskCommandHandler :
         _tokenService = tokenService;
     }
     
-    public async Task<ErrorOr<ObjectResponse<CUDTaskResult>>> Handle(
+    public async Task<ErrorOr<ObjectResponse<Task>>> Handle(
         CreateTaskCommand command,
         CancellationToken cancellationToken)
     {   
@@ -36,19 +35,19 @@ public class CreateTaskCommandHandler :
        }
        
       //create task
-      var task = Task.Task.Create(
+      var task = Task.Create(
           command.Title,
           command.Description,
           command.Priority,
           command.StartTime,
           command.EndTime,
           userId);
-        
+      Console.WriteLine($"Before Update: {task.Priority}");
       await _taskRepository.AddAsync(task);
-      
-      return new ObjectResponse<CUDTaskResult>(
+      Console.WriteLine($"After Update: {task.Priority}");
+      return new ObjectResponse<Task>(
           "Task created! Your task is now in the list.",
-          new CUDTaskResult(task)
+          task
       );
     }
 

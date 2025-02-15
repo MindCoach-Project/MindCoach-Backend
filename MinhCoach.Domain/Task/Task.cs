@@ -1,6 +1,7 @@
 using ErrorOr;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Models;
+using MinhCoach.Domain.Common.Utilities;
 using MinhCoach.Domain.Common.ValueObjects;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.Template.ValueObjects;
@@ -44,9 +45,7 @@ public sealed class Task : Model<TaskId, Guid>
         )
     {
         //Parse string to enum or receive default value
-        Priorities priorityEnum = Enum.TryParse(priority, true, out Priorities parsedPriority)
-            ? parsedPriority
-            : Priorities.Medium;
+        Priorities priorityEnum = EnumUtilities.ParseEnum<Priorities>(priority) ?? Priorities.Medium;
         
         var timestamps = new FullTimestamps(DateTime.UtcNow);
 
@@ -65,6 +64,7 @@ public sealed class Task : Model<TaskId, Guid>
         string title,
         string? description,
         string? priority,
+        string? status,
         DateTime startTime,
         DateTime endTime
         )
@@ -74,10 +74,12 @@ public sealed class Task : Model<TaskId, Guid>
         TaskDetail = TaskDetail.Update(
             title,
             description,
+            status,
             startTime,
             endTime);
         
-        if (!string.IsNullOrEmpty(priority) && Enum.TryParse(priority, true, out Priorities parsedPriority))
+        if (!string.IsNullOrEmpty(priority) && 
+            Enum.TryParse(priority, true, out Priorities parsedPriority))
             Priority = parsedPriority;
     }
     

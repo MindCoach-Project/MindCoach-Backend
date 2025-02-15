@@ -5,18 +5,19 @@ using AErrors = MinhCoach.App.Common.Errors.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
-using MinhCoach.Domain.Task.ValueObjects;
 using Task = MinhCoach.Domain.Task.Task;
+using MinhCoach.Domain.Task.ValueObjects;
 
-namespace MinhCoach.App.TaskManagement.Commands.DeleteTask;
 
-public class DeleteTaskCommandHandler :
-    IRequestHandler<DeleteTaskCommand, ErrorOr<ObjectResponse<Task>>>
+namespace MinhCoach.App.TaskManagement.Queries.GetTaskById;
+
+public class GetTaskByIdQueryHandler :
+    IRequestHandler<GetTaskByIdQuery, ErrorOr<ObjectResponse<Task>>>
 {
     private readonly ITaskRepository _taskRepository;
     private readonly ITokenService _tokenService;
     
-    public DeleteTaskCommandHandler(
+    public GetTaskByIdQueryHandler(
         ITaskRepository taskRepository,
         ITokenService tokenService)
     {
@@ -25,7 +26,7 @@ public class DeleteTaskCommandHandler :
     }
     
     public async Task<ErrorOr<ObjectResponse<Task>>> Handle(
-        DeleteTaskCommand command,
+        GetTaskByIdQuery query,
         CancellationToken cancellationToken)
     {   
         //get userid from token
@@ -34,22 +35,17 @@ public class DeleteTaskCommandHandler :
         {
             return AErrors.Authentication.UserIdFromTokenNotFound;
         }
-        Console.Write(command.TaskId);
+    
        //check task exist
-       if (await  _taskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
+       if (await  _taskRepository.FindByIdAsync(TaskId.Create(query.TaskId)) is not Task task)
            return Errors.Task.NotFound;
        
        //check access permission
        if (task.UserId.Value != userId)
            return Errors.Task.UnauthorizedAccess;
-       
-       
-      //delete task
-      task.SoftDelete();
-      await _taskRepository.UpdateAsync(task);
       
       return new ObjectResponse<Task>(
-          "Task deleted!.",
+          "Task retrieved successfully!",
           task
       );
     }

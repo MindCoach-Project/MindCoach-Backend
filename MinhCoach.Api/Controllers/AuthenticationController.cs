@@ -16,11 +16,14 @@ public class AuthenticationController : ApiController
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
 
-    public AuthenticationController(IMediator mediator, IMapper mapper)
+    public AuthenticationController(
+        IMediator mediator, 
+        IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
     }
+    
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequest req)
     {

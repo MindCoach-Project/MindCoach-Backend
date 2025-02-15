@@ -3,8 +3,8 @@ using ErrorOr;
 using MinhCoach.App.Common.Response;
 using Task = MinhCoach.Domain.Task.Task;
 
-namespace MinhCoach.App.TaskManagement.Commands.DeleteTask;
+namespace MinhCoach.App.TaskManagement.Queries.GetTaskById;
 
-public record DeleteTaskCommand(
+public record GetTaskByIdQuery(
     Guid TaskId
     ) : IRequest<ErrorOr<ObjectResponse<Task>>>;

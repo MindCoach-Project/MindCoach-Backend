@@ -9,14 +9,14 @@ public class TaskDetail : ValueObject
     public string Title { get; private set; }
     public string Description { get; private set; }
     public TaskStatuses Status { get; private set; }
-    public DateTime? StartTime { get; private set; }
-    public DateTime? EndTime { get; private set; }
+    public DateTime StartTime { get; private set; }
+    public DateTime EndTime { get; private set; }
     public TaskDetail(
         string title, 
         string description, 
         TaskStatuses status, 
-        DateTime? startTime, 
-        DateTime? endTime)
+        DateTime startTime, 
+        DateTime endTime)
     {
         Title = title;
         Description = description;
@@ -43,13 +43,17 @@ public class TaskDetail : ValueObject
     public TaskDetail Update(
         string title,
         string? description,
+        string? status,
         DateTime startTime,
         DateTime endTime)
     {
+        if (!string.IsNullOrEmpty(status) && Enum.TryParse(status, true, out TaskStatuses parsedStatus))
+            Status = parsedStatus;
+        
         return new TaskDetail(
             title,
             description ?? string.Empty,
-            TaskStatuses.Todo,
+            Status,
             startTime,
             endTime);
     }
