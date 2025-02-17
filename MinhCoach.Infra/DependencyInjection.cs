@@ -59,6 +59,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<IDbInitializer, DbInitializer>();
         
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MindCoachDbContext>(options =>

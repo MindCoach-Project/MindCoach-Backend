@@ -49,8 +49,8 @@ public class UpdateTaskCommandHandler :
           command.Description,
           command.Priority,
           command.Status,
-          command.EndTime,
-          command.StartTime);
+          command.StartTime,
+          command.EndTime);
 
       await _taskRepository.UpdateAsync(task);
 

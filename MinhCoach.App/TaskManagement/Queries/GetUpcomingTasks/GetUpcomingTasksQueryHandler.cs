@@ -40,7 +40,7 @@ public class GetUpcomingTasksQueryHandler :
         }
         
         //get current time
-        var now = _dateTimeProvider.UtcNow;
+        var now = _dateTimeProvider.Now;
         
         //get upcoming task today
         var tasks = await _taskRepository.GetUpcomingTasksTodayAsync(
