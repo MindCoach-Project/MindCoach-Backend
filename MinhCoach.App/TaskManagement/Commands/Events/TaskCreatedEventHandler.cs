@@ -9,8 +9,8 @@ public class TaskCreatedEventHandler :  INotificationHandler<TaskCreated>
         TaskCreated notification, 
         CancellationToken cancellationToken)
     {
-       var subTask = notification.task.SubTasks;
-       subTask.ForEach(s => s.UpdateTaskId(notification.task.Id));
+       var subTask = notification.Task.SubTasks;
+       subTask.ForEach(s => s.UpdateTaskId(notification.Task.Id));
        
        return Task.CompletedTask;
     }

@@ -29,13 +29,11 @@ public class TaskRepository : ITaskRepository
     public async Task AddAsync(TaskEntity task)
     {
         await _dbContext.Tasks.AddAsync(task);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(TaskEntity task)
     {
          _dbContext.Tasks.Update(task);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async  Task<List<TaskEntity>> GetTasksByDateAsync(

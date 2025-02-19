@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.Domain.User;
 
@@ -12,14 +13,13 @@ public class UserRepository : IUserRepository
     {
         _dbContext = dbContext;
     }
-    public void Add(User user)
+    public async Task Add(User user)
     {
-        _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
+        await _dbContext.Users.AddAsync(user);
     }
 
-    public User? GetUserByEmail(string email)
+    public async Task<User>? GetUserByEmail(string email)
     {
-        return _dbContext.Users.SingleOrDefault(u => u.Email == email);
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
     }
 }

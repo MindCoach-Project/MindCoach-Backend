@@ -7,7 +7,7 @@ public record CreateTaskRequest
     string? Priority,
     DateTime StartTime,
     DateTime EndTime,
-    List<SubTask>? SubTasks = null
+    List<SubTask>? SubTasks
     );
 
 public record SubTask

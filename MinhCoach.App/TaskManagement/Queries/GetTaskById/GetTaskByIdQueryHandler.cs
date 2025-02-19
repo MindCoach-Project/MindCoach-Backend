@@ -14,14 +14,14 @@ namespace MinhCoach.App.TaskManagement.Queries.GetTaskById;
 public class GetTaskByIdQueryHandler :
     IRequestHandler<GetTaskByIdQuery, ErrorOr<ObjectResponse<Task>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     
     public GetTaskByIdQueryHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
     }
     
@@ -37,7 +37,7 @@ public class GetTaskByIdQueryHandler :
         }
     
        //check task exist
-       if (await  _taskRepository.FindByIdAsync(TaskId.Create(query.TaskId)) is not Task task)
+       if (await  _unitOfWork.TaskRepository.FindByIdAsync(TaskId.Create(query.TaskId)) is not Task task)
            return Errors.Task.NotFound;
        
        //check access permission

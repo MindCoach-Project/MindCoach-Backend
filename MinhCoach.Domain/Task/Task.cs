@@ -78,7 +78,8 @@ public sealed class Task : Model<TaskId, Guid>
         string? priority,
         string? status,
         DateTime startTime,
-        DateTime endTime
+        DateTime endTime,
+        List<SubTaskUpdatedEventData>? subTasksUpdatedEventDatas
         )
     {
         Timestamps = Timestamps.UpdateTimestamp();
@@ -93,6 +94,8 @@ public sealed class Task : Model<TaskId, Guid>
         if (!string.IsNullOrEmpty(priority) && 
             Enum.TryParse(priority, true, out Priorities parsedPriority))
             Priority = parsedPriority;
+        
+        this.AddDomainEvent(new TaskUpdated(this, subTasksUpdatedEventDatas));
     }
     
     public void SoftDelete()

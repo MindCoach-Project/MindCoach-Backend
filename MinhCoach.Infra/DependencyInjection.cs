@@ -60,6 +60,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<ISubTaskRepository, SubTaskRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDbInitializer, DbInitializer>();
         services.AddScoped<PublishDomainEventsInterceptor>();
         

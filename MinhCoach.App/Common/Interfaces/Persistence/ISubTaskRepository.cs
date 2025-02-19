@@ -1,6 +1,11 @@
+using MinhCoach.Domain.SubTask;
+using MinhCoach.Domain.Task.ValueObjects;
+
 namespace MinhCoach.App.Common.Persistence;
 
-public class ISubTaskRepository
+public interface ISubTaskRepository
 {
-    
+    Task<List<SubTask>> GetByTaskIdAsync(TaskId taskId);
+
+    Task AddRangeAsync(List<SubTask> subTasks);
 }
