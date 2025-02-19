@@ -13,17 +13,17 @@ namespace MinhCoach.App.TaskManagement.Queries.GetUpcomingTasks;
 public class GetUpcomingTasksQueryHandler :
     IRequestHandler<GetUpcomingTasksQuery, ErrorOr<ObjectResponse<List<Task>>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     private readonly IDateTimeProvider _dateTimeProvider;
     
     public GetUpcomingTasksQueryHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService,
         IDateTimeProvider dateTimeProvider
         )
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
         _dateTimeProvider = dateTimeProvider;
     }
@@ -43,7 +43,7 @@ public class GetUpcomingTasksQueryHandler :
         var now = _dateTimeProvider.Now;
         
         //get upcoming task today
-        var tasks = await _taskRepository.GetUpcomingTasksTodayAsync(
+        var tasks = await _unitOfWork.TaskRepository.GetUpcomingTasksTodayAsync(
             now,
             UserId.Create(userId));
       

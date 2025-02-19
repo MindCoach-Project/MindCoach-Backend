@@ -13,14 +13,14 @@ namespace MinhCoach.App.TaskManagement.Commands.DeleteTask;
 public class DeleteTaskCommandHandler :
     IRequestHandler<DeleteTaskCommand, ErrorOr<ObjectResponse<Task>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     
     public DeleteTaskCommandHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
     }
     
@@ -36,7 +36,7 @@ public class DeleteTaskCommandHandler :
         }
         Console.Write(command.TaskId);
        //check task exist
-       if (await  _taskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
+       if (await  _unitOfWork.TaskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
            return Errors.Task.NotFound;
        
        //check access permission
@@ -46,7 +46,7 @@ public class DeleteTaskCommandHandler :
        
       //delete task
       task.SoftDelete();
-      await _taskRepository.UpdateAsync(task);
+      await _unitOfWork.TaskRepository.UpdateAsync(task);
       
       return new ObjectResponse<Task>(
           "Task deleted!.",

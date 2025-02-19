@@ -7,5 +7,16 @@ public record UpdateTaskRequest
     string? Priority,
     string? Status,
     DateTime StartTime,
+    DateTime EndTime,
+    List<SubTaskUpdate>? SubTasks
+);
+
+public record SubTaskUpdate
+(
+    Guid Id, 
+    string Title,
+    string? Description,
+    string? Status,
+    DateTime StartTime,
     DateTime EndTime
 );

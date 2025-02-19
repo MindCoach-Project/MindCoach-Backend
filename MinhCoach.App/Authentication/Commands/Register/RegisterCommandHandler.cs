@@ -14,15 +14,15 @@ public class RegisterCommandHandler :
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     public RegisterCommandHandler(
         IJwtTokenGenerator jwtTokenGenerator, 
         IPasswordHasher passwordHasher,
-        IUserRepository userRepository)
+        IUnitOfWork unitOfWork)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _passwordHasher = passwordHasher;
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<ErrorOr<ObjectResponse<AuthenticationResult>>> Handle(
@@ -30,7 +30,7 @@ public class RegisterCommandHandler :
         CancellationToken cancellationToken)
     {   
         //check if user already exists
-        if (_userRepository.GetUserByEmail(command.Email) is not null)
+        if (_unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null)
             return Errors.User.DuplicateEmail;
         
         //hash password
@@ -43,7 +43,8 @@ public class RegisterCommandHandler :
             hashedPassword
             );
 
-        _userRepository.Add(user);
+        await _unitOfWork.UserRepository.Add(user);
+        await _unitOfWork.SaveChangesAsync();
         
         //create jwt token
         string token = _jwtTokenGenerator.GenerateToken(user);
