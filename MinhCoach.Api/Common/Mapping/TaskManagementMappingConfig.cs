@@ -45,7 +45,20 @@ public class TaskManagementMappingConfig : IRegister
             .Map(d => d.EndTime, s => s.TaskDetail.EndTime)
             .Map(d => d.CreatedAt, s => s.Timestamps.CreatedAt)
             .Map(d => d.UpdatedAt, s => s.Timestamps.UpdatedAt)
-            .Map(d => d.DeletedAt, s => s.Timestamps.DeletedAt);
+            .Map(d => d.DeletedAt, s => s.Timestamps.DeletedAt)
+            .Map(d => d.SubTasks, s => s.SubTasks != null ? s.SubTasks.Select(sub => new SubTaskResponse(
+                sub.Id.Value,
+                sub.TaskDetail.Title,
+                sub.TaskDetail.Description,
+                sub.TaskDetail.Status.ToString(),
+                sub.Type.ToString(),
+                sub.TaskDetail.StartTime,
+                sub.TaskDetail.EndTime,
+                sub.Timestamps.CreatedAt,
+                sub.Timestamps.UpdatedAt,
+                sub.Timestamps.DeletedAt,
+                sub.TaskId.Value
+            )).ToList() : new List<SubTaskResponse>());;
 
         config.NewConfig<Task, GetTaskByIdResponse>()
             .Map(d => d.Id, s => s.Id.Value)

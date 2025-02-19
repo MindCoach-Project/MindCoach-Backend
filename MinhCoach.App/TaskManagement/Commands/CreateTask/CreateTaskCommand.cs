@@ -10,5 +10,13 @@ public record CreateTaskCommand(
     string? Description,
     string? Priority,
     DateTime StartTime,
-    DateTime EndTime
+    DateTime EndTime,
+    List<SubTaskCommand>? SubTasks = null
     ) : IRequest<ErrorOr<ObjectResponse<Task>>>;
+    
+    public record SubTaskCommand(
+        string Title,
+        string? Description,
+        DateTime StartTime,
+        DateTime EndTime
+        );

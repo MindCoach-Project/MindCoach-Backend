@@ -6,5 +6,14 @@ public record CreateTaskRequest
     string? Description,
     string? Priority,
     DateTime StartTime,
+    DateTime EndTime,
+    List<SubTask>? SubTasks = null
+    );
+
+public record SubTask
+(
+    string Title,
+    string? Description,
+    DateTime StartTime,
     DateTime EndTime
 );

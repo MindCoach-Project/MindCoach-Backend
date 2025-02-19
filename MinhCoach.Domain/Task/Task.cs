@@ -3,6 +3,7 @@ using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Models;
 using MinhCoach.Domain.Common.Utilities;
 using MinhCoach.Domain.Common.ValueObjects;
+using MinhCoach.Domain.Task.Events;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.Template.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
@@ -18,6 +19,8 @@ public sealed class Task : Model<TaskId, Guid>
     public UserId UserId { get; private set; }
     public TemplateId TemplateId { get; private set; }
     
+    public List<SubTask.SubTask>? SubTasks { get; private set; }
+    
     public Task(
         TaskId id,
         TaskDetail taskDetail,
@@ -25,7 +28,9 @@ public sealed class Task : Model<TaskId, Guid>
         TaskTypes type,
         FullTimestamps timestamps,
         UserId userId,
-        TemplateId templateId) : base(id)
+        TemplateId templateId,
+        List<SubTask.SubTask>? subTasks
+        ) : base(id)
     {
         TaskDetail = taskDetail;
         Priority = priority;
@@ -33,6 +38,7 @@ public sealed class Task : Model<TaskId, Guid>
         Timestamps = timestamps;
         UserId = userId;
         TemplateId = templateId;
+        SubTasks = subTasks;
     }
 
     public static Task Create(
@@ -41,23 +47,29 @@ public sealed class Task : Model<TaskId, Guid>
         string? priority,
         DateTime startTime,
         DateTime endTime,
-        Guid userId
+        Guid userId,
+        List<SubTask.SubTask>? subTasks
         )
     {
         //Parse string to enum or receive default value
         Priorities priorityEnum = EnumUtilities.ParseEnum<Priorities>(priority) ?? Priorities.Medium;
         
         var timestamps = new FullTimestamps(DateTime.UtcNow);
-
-        return new Task(
+        
+        var task =  new Task(
             TaskId.CreateUnique(),
             TaskDetail.Create(title, description, startTime, endTime),
             priorityEnum,
             TaskTypes.Task,
             timestamps,
             UserId.Create(userId),
-            null
+            null,
+            subTasks
         );
+        
+        task.AddDomainEvent(new TaskCreated(task));
+
+        return task;
     }
     
     public void Update(
