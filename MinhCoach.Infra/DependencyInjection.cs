@@ -10,6 +10,7 @@ using MinhCoach.App.Common.Interfaces.Services;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.Infra.Authentication;
 using MinhCoach.Infra.Persistence;
+using MinhCoach.Infra.Persistence.Interceptors;
 using MinhCoach.Infra.Persistence.Repositories;
 using MinhCoach.Infra.Services;
 using MySqlConnector;
@@ -60,6 +61,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<IDbInitializer, DbInitializer>();
+        services.AddScoped<PublishDomainEventsInterceptor>();
         
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MindCoachDbContext>(options =>

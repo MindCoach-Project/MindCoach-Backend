@@ -63,7 +63,8 @@ public class SubTaskConfigurations : IEntityTypeConfiguration<SubTask>
         builder.Property(x => x.TaskId)
             .HasConversion(
                 id => id.Value,
-                value => TaskId.Create(value));
+                value => TaskId.Create(value))
+            .IsRequired();;
         
         builder.OwnsOne(m => m.Timestamps, timestamps =>
         {
@@ -79,10 +80,5 @@ public class SubTaskConfigurations : IEntityTypeConfiguration<SubTask>
                 .HasColumnName(TimeColumnNames.DeletedAt.ToString()) 
                 .IsRequired(false);
         });
-        
-        builder.HasOne<Task.Task>()  
-            .WithMany()    
-            .HasForeignKey(s => s.TaskId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

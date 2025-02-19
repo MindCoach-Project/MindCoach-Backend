@@ -16,6 +16,21 @@ public static class DependencyInjection
         
         services.AddSingleton<ProblemDetailsFactory, MinhCoachProblemDetailsFactory>();
         services.AddMappings();
+
+        services.AddCors();
+        
+        return services;
+    }
+
+    public static IServiceCollection AddPolicyCors(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                policy => policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+        });
         
         return services;
     }

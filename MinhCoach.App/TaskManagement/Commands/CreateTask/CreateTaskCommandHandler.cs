@@ -4,6 +4,7 @@ using MinhCoach.App.Common.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
+using MinhCoach.Domain.SubTask;
 using Task = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.App.TaskManagement.Commands.CreateTask;
@@ -41,10 +42,15 @@ public class CreateTaskCommandHandler :
           command.Priority,
           command.StartTime,
           command.EndTime,
-          userId);
-      Console.WriteLine($"Before Update: {task.Priority}");
+          userId,
+          command.SubTasks?.ConvertAll(s => SubTask.Create(
+              s.Title,
+              s.Description,
+              s.StartTime,
+              s.EndTime)) ?? new List<SubTask>());
+      
       await _taskRepository.AddAsync(task);
-      Console.WriteLine($"After Update: {task.Priority}");
+
       return new ObjectResponse<Task>(
           "Task created! Your task is now in the list.",
           task
