@@ -17,7 +17,7 @@ public static class DependencyInjection
         services.AddSingleton<ProblemDetailsFactory, MinhCoachProblemDetailsFactory>();
         services.AddMappings();
 
-        services.AddCors();
+        services.AddPolicyCors();
         
         return services;
     }
