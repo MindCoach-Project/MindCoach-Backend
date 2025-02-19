@@ -13,17 +13,17 @@ namespace MinhCoach.App.TaskManagement.Queries.GetTasksByWeek;
 public class GetTasksByWeekQueryHandler :
     IRequestHandler<GetTasksByWeekQuery, ErrorOr<ObjectResponse<List<Task>>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     private readonly IDateTimeProvider _dateTimeProvider;
     
     public GetTasksByWeekQueryHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService,
         IDateTimeProvider dateTimeProvider
         )
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
         _dateTimeProvider = dateTimeProvider;
     }
@@ -41,7 +41,7 @@ public class GetTasksByWeekQueryHandler :
         
         //get task by week
         var (startOfWeek, endOfWeek) = _dateTimeProvider.GetWeekRange(query.Date);
-        var tasks = await _taskRepository.GetTasksByWeekAsync(
+        var tasks = await _unitOfWork.TaskRepository.GetTasksByWeekAsync(
             startOfWeek,
             endOfWeek,
             UserId.Create(userId));

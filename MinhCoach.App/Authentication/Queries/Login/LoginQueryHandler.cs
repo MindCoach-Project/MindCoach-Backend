@@ -15,15 +15,15 @@ public class LoginQueryHandler :
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     public LoginQueryHandler(
         IJwtTokenGenerator jwtTokenGenerator, 
         IPasswordHasher passwordHasher,
-        IUserRepository userRepository)
+        IUnitOfWork unitOfWork)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _passwordHasher = passwordHasher;
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<ErrorOr<ObjectResponse<AuthenticationResult>>> Handle(
@@ -31,7 +31,7 @@ public class LoginQueryHandler :
         CancellationToken cancellationToken)
     {
         //validate the user exists
-        if (_userRepository.GetUserByEmail(query.Email) is not User user)
+        if (await _unitOfWork.UserRepository.GetUserByEmail(query.Email) is not User user)
             return Errors.Authentication.InvalidCredentials;
 
         //validate the password is correct

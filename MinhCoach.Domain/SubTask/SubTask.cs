@@ -54,6 +54,25 @@ public sealed class SubTask : Model<SubTaskId, Guid>
         TaskId = taskId;
     }
     
+    public void Update(
+        string title,
+        string? description,
+        string? status,
+        DateTime startTime,
+        DateTime endTime
+    )
+    {
+        Timestamps = Timestamps.UpdateTimestamp();
+        
+        TaskDetail = TaskDetail.Update(
+            title,
+            description,
+            status,
+            startTime,
+            endTime);
+    }
+    
+    
 #pragma warning disable CS8618
     private SubTask()
     {

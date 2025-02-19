@@ -4,4 +4,4 @@ using MinhCoach.Domain.Task.ValueObjects;
 namespace MinhCoach.Domain.Task.Events;
 
 public record TaskCreated(
-    Task task) : IDomainEvent;
+    Task Task) : IDomainEvent;

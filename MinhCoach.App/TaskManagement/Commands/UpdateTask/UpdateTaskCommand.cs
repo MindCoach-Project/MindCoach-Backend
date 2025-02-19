@@ -12,5 +12,15 @@ public record UpdateTaskCommand(
     string? Priority,
     string? Status,
     DateTime StartTime,
-    DateTime EndTime
+    DateTime EndTime,
+    List<SubTaskCommand>? SubTasks = null
     ) : IRequest<ErrorOr<ObjectResponse<Task>>>;
+    
+public record SubTaskCommand(
+    Guid Id,
+    string Title,
+    string? Description,
+    string? Status,
+    DateTime StartTime,
+    DateTime EndTime
+);

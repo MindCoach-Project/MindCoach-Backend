@@ -14,14 +14,14 @@ namespace MinhCoach.App.TaskManagement.Queries.GetTasksByDate;
 public class GetTasksByDateQueryHandler :
     IRequestHandler<GetTasksByDateQuery, ErrorOr<ObjectResponse<List<Task>>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     
     public GetTasksByDateQueryHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
     }
     
@@ -39,7 +39,7 @@ public class GetTasksByDateQueryHandler :
         //get task by date and status
         var statusEnum = EnumUtilities.ParseEnum<TaskStatuses>(query.Status);
         
-        var tasks = await _taskRepository.GetTasksByDateAsync(
+        var tasks = await _unitOfWork.TaskRepository.GetTasksByDateAsync(
             query.Date, 
             statusEnum, 
             UserId.Create(userId));

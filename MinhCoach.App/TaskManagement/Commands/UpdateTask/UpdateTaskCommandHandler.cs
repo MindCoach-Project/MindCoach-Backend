@@ -5,6 +5,9 @@ using AErrors = MinhCoach.App.Common.Errors.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
+using MinhCoach.Domain.SubTask;
+using MinhCoach.Domain.SubTask.ValueObjects;
+using MinhCoach.Domain.Task.Events;
 using MinhCoach.Domain.Task.ValueObjects;
 using Task = MinhCoach.Domain.Task.Task;
 
@@ -13,14 +16,14 @@ namespace MinhCoach.App.TaskManagement.Commands.UpdateTask;
 public class UpdateTaskCommandHandler :
     IRequestHandler<UpdateTaskCommand, ErrorOr<ObjectResponse<Task>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     
     public UpdateTaskCommandHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
     }
     
@@ -36,7 +39,7 @@ public class UpdateTaskCommandHandler :
         }
     
        //check task exist
-       if (await  _taskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
+       if (await  _unitOfWork.TaskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
            return Errors.Task.NotFound;
        
        //check access permission
@@ -50,14 +53,22 @@ public class UpdateTaskCommandHandler :
           command.Priority,
           command.Status,
           command.StartTime,
-          command.EndTime);
+          command.EndTime,
+          command.SubTasks?.ConvertAll(s => new SubTaskUpdatedEventData(
+              SubTaskId.Create(s.Id),
+              s.Title,
+              s.Description,
+              s.Status,
+              s.StartTime,
+              s.EndTime)) ?? new List<SubTaskUpdatedEventData>());
 
-      await _taskRepository.UpdateAsync(task);
+      await _unitOfWork.TaskRepository.UpdateAsync(task);
+      await _unitOfWork.SaveChangesAsync();
+
 
       return new ObjectResponse<Task>(
           "Task updated! Your task is now in the list.",
           task
       );
     }
-
 }

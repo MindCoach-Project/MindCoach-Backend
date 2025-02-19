@@ -12,14 +12,14 @@ namespace MinhCoach.App.TaskManagement.Commands.CreateTask;
 public class CreateTaskCommandHandler :
     IRequestHandler<CreateTaskCommand, ErrorOr<ObjectResponse<Task>>>
 {
-    private readonly ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
     
     public CreateTaskCommandHandler(
-        ITaskRepository taskRepository,
+        IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
-        _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
     }
     
@@ -49,7 +49,8 @@ public class CreateTaskCommandHandler :
               s.StartTime,
               s.EndTime)) ?? new List<SubTask>());
       
-      await _taskRepository.AddAsync(task);
+      await _unitOfWork.TaskRepository.AddAsync(task);
+      await _unitOfWork.SaveChangesAsync();
 
       return new ObjectResponse<Task>(
           "Task created! Your task is now in the list.",
