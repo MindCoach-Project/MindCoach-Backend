@@ -72,6 +72,11 @@ public sealed class SubTask : Model<SubTaskId, Guid>
             endTime);
     }
     
+    public void SoftDelete()
+    {
+        Timestamps = Timestamps.MarkAsDeleted();
+    }
+    
     
 #pragma warning disable CS8618
     private SubTask()

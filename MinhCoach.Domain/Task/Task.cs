@@ -133,6 +133,8 @@ public sealed class Task : Model<TaskId, Guid>
     public void SoftDelete()
     {
         Timestamps = Timestamps.MarkAsDeleted();
+        
+        this.AddDomainEvent(new TaskDeleted(this));
     }
     
 #pragma warning disable CS8618

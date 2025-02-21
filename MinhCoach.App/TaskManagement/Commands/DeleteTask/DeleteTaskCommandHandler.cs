@@ -34,8 +34,8 @@ public class DeleteTaskCommandHandler :
         {
             return AErrors.Authentication.UserIdFromTokenNotFound;
         }
-        Console.Write(command.TaskId);
-       //check task exist
+
+        //check task exist
        if (await  _unitOfWork.TaskRepository.FindByIdAsync(TaskId.Create(command.TaskId)) is not Task task)
            return Errors.Task.NotFound;
        
@@ -47,6 +47,7 @@ public class DeleteTaskCommandHandler :
       //delete task
       task.SoftDelete();
       await _unitOfWork.TaskRepository.UpdateAsync(task);
+      await _unitOfWork.SaveChangesAsync();
       
       return new ObjectResponse<Task>(
           "Task deleted!.",
