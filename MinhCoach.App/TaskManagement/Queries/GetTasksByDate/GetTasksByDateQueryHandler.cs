@@ -6,8 +6,8 @@ using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Utilities;
-using Task = MinhCoach.Domain.Task.Task;
 using MinhCoach.Domain.User.ValueObjects;
+using Task = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.App.TaskManagement.Queries.GetTasksByDate;
 
@@ -49,5 +49,4 @@ public class GetTasksByDateQueryHandler :
           tasks
       );
     }
-
 }

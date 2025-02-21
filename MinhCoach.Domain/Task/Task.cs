@@ -3,6 +3,7 @@ using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Models;
 using MinhCoach.Domain.Common.Utilities;
 using MinhCoach.Domain.Common.ValueObjects;
+using MinhCoach.Domain.SubTask.ValueObjects;
 using MinhCoach.Domain.Task.Events;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.Template.ValueObjects;
@@ -40,7 +41,33 @@ public sealed class Task : Model<TaskId, Guid>
         TemplateId = templateId;
         SubTasks = subTasks;
     }
+    
+    public static Task ConvertSubTaskToTask(
+     SubTask.SubTask subTask,
+         Priorities priority
+    )
+    {
+        //Parse string to enum or receive default value
+        Priorities priorityEnum = priority;
 
+        var timestamps = subTask.Timestamps;
+        
+        var task =  new Task(
+            TaskId.Create(subTask.Id.Value),
+            subTask.TaskDetail,
+            priority,
+            TaskTypes.SubTask,
+            timestamps,
+            null,
+            null,
+            null
+        );
+        
+        task.AddDomainEvent(new TaskCreated(task));
+
+        return task;
+    }
+    
     public static Task Create(
         string title,
         string? description,
@@ -71,7 +98,12 @@ public sealed class Task : Model<TaskId, Guid>
 
         return task;
     }
-    
+
+    public void UpdateListSubtasks(
+        List<SubTask.SubTask>? subTasks)
+    {
+        SubTasks = subTasks ?? new List<SubTask.SubTask>();
+    }
     public void Update(
         string title,
         string? description,

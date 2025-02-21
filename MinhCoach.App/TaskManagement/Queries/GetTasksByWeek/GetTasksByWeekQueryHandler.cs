@@ -5,8 +5,8 @@ using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Interfaces.Services;
 using MinhCoach.App.Common.Persistence;
 using MinhCoach.App.Common.Response;
-using Task = MinhCoach.Domain.Task.Task;
 using MinhCoach.Domain.User.ValueObjects;
+using Task = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.App.TaskManagement.Queries.GetTasksByWeek;
 
