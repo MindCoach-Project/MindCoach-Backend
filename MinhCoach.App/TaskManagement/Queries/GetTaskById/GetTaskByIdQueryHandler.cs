@@ -43,11 +43,10 @@ public class GetTaskByIdQueryHandler :
        //check access permission
        if (task.UserId.Value != userId)
            return Errors.Task.UnauthorizedAccess;
-      
-      return new ObjectResponse<Task>(
+
+       return new ObjectResponse<Task>(
           "Task retrieved successfully!",
           task
       );
     }
-
 }

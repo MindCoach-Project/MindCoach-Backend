@@ -12,5 +12,6 @@ public record TaskResponse
     DateTime EndTime,
     DateTime CreatedAt,
     DateTime? UpdatedAt,
-    DateTime? DeletedAt
+    DateTime? DeletedAt,
+    List<SubTaskResponse> SubTasks
 );

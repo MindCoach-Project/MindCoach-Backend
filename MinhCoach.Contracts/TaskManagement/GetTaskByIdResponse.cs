@@ -11,5 +11,6 @@ public record GetTaskByIdResponse(
     DateTime EndTime,
     DateTime CreatedAt,
     DateTime? UpdatedAt,
-    DateTime? DeletedAt
+    DateTime? DeletedAt,
+    List<SubTaskResponse> SubTasks
 );
