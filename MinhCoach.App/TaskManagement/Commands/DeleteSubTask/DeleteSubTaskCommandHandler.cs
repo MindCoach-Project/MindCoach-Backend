@@ -51,7 +51,7 @@ public class DeleteSubTaskCommandHandler :
                    TaskId.Create(command.TaskId),
                    SubTaskId.Create(command.SubTaskId)) is not SubTask subTask)
        {
-           return Errors.SubTask.Mismatch;
+           return Errors.SubTask.NotFound;
        }
        
       //delete subTask
