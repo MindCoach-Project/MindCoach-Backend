@@ -3,7 +3,7 @@ using ErrorOr;
 using MinhCoach.Domain.Common.Errors;
 using AErrors = MinhCoach.App.Common.Errors.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.SubTask;
 using MinhCoach.Domain.SubTask.ValueObjects;

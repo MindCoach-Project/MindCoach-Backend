@@ -1,5 +1,5 @@
 using MediatR;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.Task.Events;
 
 namespace MinhCoach.App.TaskManagement.Commands.Events;
