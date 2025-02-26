@@ -1,6 +1,6 @@
 using MinhCoach.Domain.User;
 
-namespace MinhCoach.App.Common.Persistence;
+namespace MinhCoach.App.Common.Interfaces.Persistence;
 
 public interface IUserRepository
 {

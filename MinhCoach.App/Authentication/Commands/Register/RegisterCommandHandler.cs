@@ -2,7 +2,7 @@ using MediatR;
 using ErrorOr;
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Common.Errors;
 using MinhCoach.Domain.User;

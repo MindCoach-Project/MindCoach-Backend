@@ -1,9 +1,8 @@
 using ErrorOr;
 using MediatR;
-
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Errors;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.User;

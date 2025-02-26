@@ -2,7 +2,7 @@ using MediatR;
 using ErrorOr;
 using AErrors = MinhCoach.App.Common.Errors.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.Utilities;

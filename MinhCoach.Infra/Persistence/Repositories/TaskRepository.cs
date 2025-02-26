@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Task.ValueObjects;
+using MinhCoach.Domain.Template.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
 using TaskEntity = MinhCoach.Domain.Task.Task;
 
@@ -28,7 +29,7 @@ public class TaskRepository : ITaskRepository
             t => t.Id == taskId && 
                  t.Timestamps.DeletedAt == null);
     }
-    
+
     public async Task AddAsync(TaskEntity task)
     {
         await _dbContext.Tasks.AddAsync(task);
@@ -51,7 +52,7 @@ public class TaskRepository : ITaskRepository
         
         if (status.HasValue)
              return await query.Where(t => 
-                    t.TaskDetail.Status == status.Value ).ToListAsync();
+                    t.TaskDetail.Status == status.Value).ToListAsync();
         
         var result = await query.ToListAsync();
         
@@ -85,19 +86,29 @@ public class TaskRepository : ITaskRepository
     
     public async Task<List<TaskEntity>> GetTasksByWeekAsync(DateTime startOfWeek, DateTime endOfWeek, UserId userId)
     {
-        var query = await _dbContext.Tasks
+        return await _dbContext.Tasks
             .Include(t => t.SubTasks
                 .Where(t => t.Timestamps.DeletedAt == null))
             .Where(t => t.UserId == userId &&
                         t.Timestamps.DeletedAt == null &&
                         t.TaskDetail.StartTime >= startOfWeek &&
                         t.TaskDetail.StartTime <= endOfWeek).ToListAsync();
-
-        return query.SelectMany(t => t.SubTasks.Any()
-            ? t.SubTasks.Select(s => TaskEntity.ConvertSubTaskToTask(s, t.Priority))
-            : new List<TaskEntity>() {t})
-            .OrderBy(t => t.TaskDetail.StartTime)
-            .ToList();
+    }
+    
+    public async Task<List<TaskEntity>> GetTaskByTemplateId(TemplateId templateId, int numberOfTasks)
+    {
+        var tasks = await _dbContext.Tasks
+            .Include(t => t.SubTasks
+                .Where(t => t.Timestamps.DeletedAt == null))
+            .Where(t => t.TemplateId == templateId &&
+                        t.Timestamps.DeletedAt == null).ToListAsync();
+        
+        if (numberOfTasks > 0)
+        {
+            tasks.Take(numberOfTasks);
+        }
+        
+        return tasks.OrderBy(t => t.Timestamps.CreatedAt).ToList();
     }
     
     public async Task<List<TaskEntity>> GetUpcomingTasksTodayAsync(DateTime now, UserId userId)

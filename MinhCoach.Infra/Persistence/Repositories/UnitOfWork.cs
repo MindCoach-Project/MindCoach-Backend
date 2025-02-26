@@ -1,4 +1,4 @@
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 
 namespace MinhCoach.Infra.Persistence.Repositories;
 
@@ -9,17 +9,20 @@ public class UnitOfWork : IUnitOfWork
     public ITaskRepository TaskRepository { get; }
     public IUserRepository UserRepository { get; }
     public ISubTaskRepository SubTaskRepository { get; }
-    
+    public ITemplateRepository TemplateRepository { get; }
+
     public UnitOfWork(
         MindCoachDbContext context, 
         IUserRepository userRepository, 
         ITaskRepository taskRepository, 
-        ISubTaskRepository subTaskRepository)
+        ISubTaskRepository subTaskRepository,
+        ITemplateRepository templateRepository)
     {
         _context = context;
         UserRepository = userRepository;
         TaskRepository = taskRepository;
         SubTaskRepository = subTaskRepository;
+        TemplateRepository = templateRepository;
     }
     
     public async Task<int> SaveChangesAsync()

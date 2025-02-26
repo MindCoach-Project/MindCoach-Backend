@@ -2,7 +2,7 @@ using MediatR;
 using ErrorOr;
 using MinhCoach.App.Common.Errors;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.SubTask;
 using Task = MinhCoach.Domain.Task.Task;

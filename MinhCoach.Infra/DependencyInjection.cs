@@ -7,13 +7,12 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Interfaces.Services;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Infra.Authentication;
 using MinhCoach.Infra.Persistence;
 using MinhCoach.Infra.Persistence.Interceptors;
 using MinhCoach.Infra.Persistence.Repositories;
 using MinhCoach.Infra.Services;
-using MySqlConnector;
 
 namespace MinhCoach.Infra;
 
@@ -61,6 +60,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<ISubTaskRepository, SubTaskRepository>();
+        services.AddScoped<ITemplateRepository, TemplateRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDbInitializer, DbInitializer>();
         services.AddScoped<PublishDomainEventsInterceptor>();

@@ -63,10 +63,12 @@ namespace MinhCoach.Infra.Migrations
                         .HasColumnType("ENUM('Task', 'SubTask', 'TemplateTask')")
                         .HasDefaultValue("Task");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
 
                     b.ToTable("Tasks", (string)null);
                 });
@@ -219,6 +221,10 @@ namespace MinhCoach.Infra.Migrations
 
             modelBuilder.Entity("MinhCoach.Domain.Task.Task", b =>
                 {
+                    b.HasOne("MinhCoach.Domain.Template.Template", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("TemplateId");
+
                     b.OwnsOne("MinhCoach.Domain.Common.ValueObjects.TaskDetail", "TaskDetail", b1 =>
                         {
                             b1.Property<Guid>("TaskId")
@@ -354,6 +360,11 @@ namespace MinhCoach.Infra.Migrations
             modelBuilder.Entity("MinhCoach.Domain.Task.Task", b =>
                 {
                     b.Navigation("SubTasks");
+                });
+
+            modelBuilder.Entity("MinhCoach.Domain.Template.Template", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }
