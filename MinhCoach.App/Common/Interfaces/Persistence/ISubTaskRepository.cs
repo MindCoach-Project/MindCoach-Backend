@@ -1,7 +1,7 @@
 using MinhCoach.Domain.SubTask;
 using MinhCoach.Domain.Task.ValueObjects;
 
-namespace MinhCoach.App.Common.Persistence;
+namespace MinhCoach.App.Common.Interfaces.Persistence;
 
 public interface ISubTaskRepository
 {

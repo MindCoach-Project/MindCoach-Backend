@@ -2,7 +2,7 @@ using MediatR;
 using ErrorOr;
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.Common.Errors;
 using MinhCoach.Domain.User;
@@ -30,7 +30,7 @@ public class RegisterCommandHandler :
         CancellationToken cancellationToken)
     {   
         //check if user already exists
-        if (_unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null)
+        if (await _unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null)
             return Errors.User.DuplicateEmail;
         
         //hash password

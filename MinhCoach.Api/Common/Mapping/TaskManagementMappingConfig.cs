@@ -3,6 +3,7 @@ using MapsterMapper;
 using MinhCoach.App.TaskManagement.Commands.CreateTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteTask;
 using MinhCoach.App.TaskManagement.Commands.UpdateTask;
+using MinhCoach.App.TaskManagement.DomainModels;
 using MinhCoach.App.TaskManagement.Queries.GetTaskById;
 using MinhCoach.App.TaskManagement.Queries.GetTasksByDate;
 using MinhCoach.App.TaskManagement.Queries.GetTasksByWeek;
@@ -60,30 +61,20 @@ public class TaskManagementMappingConfig : IRegister
                 sub.TaskId.Value
             )).ToList() : new List<SubTaskResponse>());;
 
-        config.NewConfig<Task, GetTaskByIdResponse>()
-            .Map(d => d.Id, s => s.Id.Value)
+        config.NewConfig<UnifiedTaskDomainModel, UnifiedTaskResponse>()
             .Map(d => d.Title, s => s.TaskDetail.Title)
             .Map(d => d.Description, s => s.TaskDetail.Description)
-            .Map(d => d.Status, s => s.TaskDetail.Status)
             .Map(d => d.StartTime, s => s.TaskDetail.StartTime)
             .Map(d => d.EndTime, s => s.TaskDetail.EndTime)
+            .Map(d => d.Status, s => s.TaskDetail.Status.ToString())
             .Map(d => d.CreatedAt, s => s.Timestamps.CreatedAt)
             .Map(d => d.UpdatedAt, s => s.Timestamps.UpdatedAt)
             .Map(d => d.DeletedAt, s => s.Timestamps.DeletedAt)
-            .Map(d => d.SubTasks, s => s.SubTasks != null ? s.SubTasks.Select(sub => new SubTaskResponse(
-                sub.Id.Value,
-                sub.TaskDetail.Title,
-                sub.TaskDetail.Description,
-                sub.TaskDetail.Status.ToString(),
-                sub.Type.ToString(),
-                sub.TaskDetail.StartTime,
-                sub.TaskDetail.EndTime,
-                sub.Timestamps.CreatedAt,
-                sub.Timestamps.UpdatedAt,
-                sub.Timestamps.DeletedAt,
-                sub.TaskId.Value
-            )).ToList() : new List<SubTaskResponse>());;
-        
+            .Map(d => d.Priority, s => s.Priority.HasValue ? s.Priority.Value.ToString() : null)
+            .Map(d => d.Type, s => s.Type.ToString())
+            .Map(d => d.TaskId, s => s.TaskId == null ? (Guid?)null : s.TaskId.Value);
+
+
         config.NewConfig<Task, TaskResponse>()
             .Map(d => d.Id, s => s.Id.Value)
             .Map(d => d.Title, s => s.TaskDetail.Title)
@@ -105,7 +96,7 @@ public class TaskManagementMappingConfig : IRegister
                 sub.Timestamps.CreatedAt,
                 sub.Timestamps.UpdatedAt,
                 sub.Timestamps.DeletedAt,
-                sub.TaskId.Value
+                sub.TaskId.Value    
             )).ToList() : new List<SubTaskResponse>());;    
     }
 }

@@ -1,10 +1,11 @@
+
 namespace MinhCoach.Contracts.TaskManagement;
 
-public record GetTaskByIdResponse(
+public record UnifiedTaskResponse(
     Guid Id,
     string Title,
     string? Description,
-    string Priority,
+    string? Priority,
     string Status,
     string Type,
     DateTime StartTime,
@@ -12,5 +13,5 @@ public record GetTaskByIdResponse(
     DateTime CreatedAt,
     DateTime? UpdatedAt,
     DateTime? DeletedAt,
-    List<SubTaskResponse> SubTasks
+    Guid? TaskId
 );

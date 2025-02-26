@@ -71,7 +71,7 @@ public class TaskConfigurations : IEntityTypeConfiguration<Task>
             .HasConversion(
                 id => id.Value,
                 value => UserId.Create(value))
-            .IsRequired();
+            .IsRequired((false));
         
         builder.Property(x => x.TemplateId)
             .HasConversion(

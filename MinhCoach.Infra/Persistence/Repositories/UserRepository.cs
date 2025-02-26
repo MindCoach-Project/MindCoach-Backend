@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.Infra.Persistence.Repositories;

@@ -14,7 +14,6 @@ using MinhCoach.Contracts.TaskManagement;
 
 namespace MinhCoach.Api.Controllers;
 [Route("task-management/tasks")]
-[Authorize]
 public class TaskManagementController : ApiController
 {
     private readonly ISender _mediator;
@@ -65,7 +64,7 @@ public class TaskManagementController : ApiController
         var query = _mapper.Map<GetTaskByIdQuery>(taskId);
         var taskResult = await _mediator.Send(query);
         return taskResult.Match(
-            response => Ok(_mapper.Map<ApiResponse<GetTaskByIdResponse>>(response)),
+            response => Ok(_mapper.Map<ApiResponse<TaskResponse>>(response)),
             errors=> Problem(errors));
     }
     
@@ -85,7 +84,7 @@ public class TaskManagementController : ApiController
         var query = _mapper.Map<GetTasksByWeekQuery>(date);
         var taskResult = await _mediator.Send(query);
         return taskResult.Match(
-            response => Ok(_mapper.Map<ApiResponse<List<TaskResponse>>>(response)),
+            response => Ok(_mapper.Map<ApiResponse<List<UnifiedTaskResponse>>>(response)),
             errors=> Problem(errors));
     }
     
