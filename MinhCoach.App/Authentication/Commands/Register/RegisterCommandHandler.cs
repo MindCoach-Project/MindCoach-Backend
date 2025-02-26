@@ -30,8 +30,9 @@ public class RegisterCommandHandler :
         CancellationToken cancellationToken)
     {   
         //check if user already exists
-        if (await _unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null)
+        if (await _unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null){
             return Errors.User.DuplicateEmail;
+        }
         
         //hash password
         string hashedPassword  = _passwordHasher.HashPassword(command.Password); 

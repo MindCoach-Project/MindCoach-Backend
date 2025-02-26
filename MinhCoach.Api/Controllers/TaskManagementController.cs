@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhCoach.App.Common.Response;
 using MinhCoach.App.TaskManagement.Commands.CreateTask;
+using MinhCoach.App.TaskManagement.Commands.DeleteSubTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteTask;
 using MinhCoach.App.TaskManagement.Commands.UpdateTask;
 using MinhCoach.App.TaskManagement.Queries.GetTaskById;
@@ -56,6 +57,16 @@ public class TaskManagementController : ApiController
         return taskResult.Match(
             response => Ok(_mapper.Map<ApiResponse<CUDTaskResponse>>(response)),
             errors => Problem(errors));
+    }
+    
+    [HttpDelete("{taskId}/subTasks/{subTaskId}")]
+    public async Task<IActionResult> DeleteSubtask(Guid taskId, Guid subTaskId)
+    {
+        var command = _mapper.Map<DeleteSubTaskCommand>((taskId, subTaskId));
+        var subTaskResult = await _mediator.Send(command);
+        return subTaskResult.Match(
+            response => Ok(_mapper.Map<ApiResponse<DeleteSubTaskResponse>>(response)),
+            errors=> Problem(errors));
     }
     
     [HttpGet("{taskId}")]

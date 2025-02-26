@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.SubTask;
+using MinhCoach.Domain.SubTask.ValueObjects;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
 using MinhCoach.Infra.Services;
@@ -20,11 +21,25 @@ public class SubTaskRepository : ISubTaskRepository
         _dbContext = dbContext;
     }
 
+    public async Task<SubTask?> ValidateSubtaskMatchWithTask(TaskId taskId, SubTaskId subTaskId)
+    {
+        return await _dbContext.SubTasks
+            .Where(s => s.TaskId == taskId &&
+                        s.Id == subTaskId &&
+                        s.Timestamps.DeletedAt == null)
+            .SingleOrDefaultAsync();
+    }
+
     public async Task<List<SubTask>> GetByTaskIdAsync(TaskId taskId)
     {
         return await _dbContext.SubTasks.Where(
             s => s.TaskId == taskId &&
                  s.Timestamps.DeletedAt == null).ToListAsync();
+    }
+
+    public async Task UpdateAsync(SubTask subTask)
+    {
+        _dbContext.SubTasks.Update(subTask);
     }
 
     public async Task AddRangeAsync(List<SubTask> subTasks)
