@@ -3,7 +3,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MinhCoach.App.Common.Response;
+using MinhCoach.App.TemplateManagement.Commands.GenerateTasksFromTemplate;
 using MinhCoach.App.TemplateManagement.Queries.GetTemplates;
+using MinhCoach.Contracts.TaskManagement;
 using MinhCoach.Contracts.TemplateManagement;
 
 namespace MinhCoach.Api.Controllers;
@@ -25,16 +27,22 @@ public class TemplateManagementController : ApiController
     
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetSystemTemplates()
+    public async Task<IActionResult> GetTemplates()
     {
         var query = new GetTemplatesQuery();
         var taskResult = await _mediator.Send(query);
         return taskResult.Match(
-            response =>
-            {
-                Console.WriteLine(response);
-                return Ok(_mapper.Map<ApiResponse<List<TemplateResponse>>>(response));
-            },
+            response => Ok(_mapper.Map<ApiResponse<List<TemplateResponse>>>(response)),
+            errors=> Problem(errors));
+    }
+    
+    [HttpPost("create-task-from-template/{templateId}")]
+    public async Task<IActionResult> GenerateTasksFromTemplates(Guid templateId)
+    {
+        var command = new GenerateTasksFromTemplateCommand(templateId);
+        var taskResult = await _mediator.Send(command);
+        return taskResult.Match(
+            response => Ok(_mapper.Map<ApiResponse<List<CUDTaskResponse>>>(response)),
             errors=> Problem(errors));
     }
 }

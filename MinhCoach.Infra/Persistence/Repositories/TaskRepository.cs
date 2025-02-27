@@ -11,7 +11,8 @@ namespace MinhCoach.Infra.Persistence.Repositories;
 public class TaskRepository : ITaskRepository
 {
     private readonly MindCoachDbContext _dbContext;
-    
+    private ITaskRepository _taskRepositoryImplementation;
+
     public TaskRepository(
         MindCoachDbContext dbContext
         )
@@ -33,6 +34,11 @@ public class TaskRepository : ITaskRepository
     public async Task AddAsync(TaskEntity task)
     {
         await _dbContext.Tasks.AddAsync(task);
+    }
+
+    public async Task AddRangeAsync(List<TaskEntity> tasks)
+    {
+        await _dbContext.Tasks.AddRangeAsync(tasks);
     }
 
     public async Task UpdateAsync(TaskEntity task)

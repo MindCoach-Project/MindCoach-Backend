@@ -14,6 +14,7 @@ public interface ITaskRepository
     Task<List<TaskEntity>> GetTaskByTemplateId(TemplateId templateId, int numberOfTasks);
 
     Task  AddAsync(TaskEntity task);
+    Task  AddRangeAsync(List<TaskEntity> tasks);
     Task  UpdateAsync(TaskEntity task);
     Task<List<TaskEntity>> GetTasksByDateAsync(DateTime date, TaskStatuses? status, UserId userId);
 

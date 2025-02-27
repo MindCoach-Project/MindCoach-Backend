@@ -16,7 +16,7 @@ public class FullTimestamps : BaseTimestamps
     
     public FullTimestamps UpdateTimestamp()
     {
-        return new FullTimestamps(CreatedAt, DateTime.UtcNow);
+        return new FullTimestamps(CreatedAt, DateTime.Now);
     }
     
     public FullTimestamps MarkAsDeleted()

@@ -81,7 +81,6 @@ public class TaskManagementMappingConfig : IRegister
             .Map(d => d.Type, s => s.Type.ToString())
             .Map(d => d.TaskId, s => s.TaskId == null ? (Guid?)null : s.TaskId.Value);
 
-
         config.NewConfig<Task, TaskResponse>()
             .Map(d => d.Id, s => s.Id.Value)
             .Map(d => d.Title, s => s.TaskDetail.Title)

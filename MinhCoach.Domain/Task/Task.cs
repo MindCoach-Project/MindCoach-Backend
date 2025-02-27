@@ -41,6 +41,32 @@ public sealed class Task : Model<TaskId, Guid>
         TemplateId = templateId;
         SubTasks = subTasks;
     }
+
+    public static Task GenerateTaskFromTemplate(
+        Priorities priority,
+        TaskDetail taskDetail,
+        TaskTypes type,
+        UserId userId,
+        List<SubTask.SubTask>? subTasks
+            )
+    {
+        var timestamps = new FullTimestamps(DateTime.Now);
+
+        var task =  new Task(
+            TaskId.CreateUnique(),
+            taskDetail,
+            priority,
+            type,
+            timestamps,
+            userId,
+            null,
+            subTasks
+        );
+        
+        task.AddDomainEvent(new TaskCreated(task));
+
+        return task;
+    }
     
     public static Task ConvertSubTaskToTask(
      SubTask.SubTask subTask,
@@ -81,7 +107,7 @@ public sealed class Task : Model<TaskId, Guid>
         //Parse string to enum or receive default value
         Priorities priorityEnum = EnumUtilities.ParseEnum<Priorities>(priority) ?? Priorities.Medium;
         
-        var timestamps = new FullTimestamps(DateTime.UtcNow);
+        var timestamps = new FullTimestamps(DateTime.Now);
         
         var task =  new Task(
             TaskId.CreateUnique(),

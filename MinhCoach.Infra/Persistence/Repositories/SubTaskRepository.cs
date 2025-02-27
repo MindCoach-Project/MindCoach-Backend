@@ -1,12 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MinhCoach.App.Common.Interfaces.Persistence;
-using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.SubTask;
 using MinhCoach.Domain.SubTask.ValueObjects;
 using MinhCoach.Domain.Task.ValueObjects;
-using MinhCoach.Domain.User.ValueObjects;
-using MinhCoach.Infra.Services;
-using TaskEntity = MinhCoach.Domain.Task.Task;
 
 namespace MinhCoach.Infra.Persistence.Repositories;
 

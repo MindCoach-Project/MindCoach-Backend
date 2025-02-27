@@ -3,6 +3,7 @@ using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Task.ValueObjects;
 using MinhCoach.Domain.Template;
+using MinhCoach.Domain.Template.ValueObjects;
 using MinhCoach.Domain.User.ValueObjects;
 using TaskEntity = MinhCoach.Domain.Task.Task;
 
@@ -32,5 +33,13 @@ public class TemplateRepository : ITemplateRepository
             query = query.Where(t => !t.IsPrivateTemplate);
 
         return await query.ToListAsync();
+    }
+
+    public async Task<Template?> FindByIdAsync(TemplateId templateId)
+    {
+        return await _dbContext.Templates
+            .SingleOrDefaultAsync(
+                t => t.Id == templateId && 
+                     t.Timestamps.DeletedAt == null);
     }
 } 
