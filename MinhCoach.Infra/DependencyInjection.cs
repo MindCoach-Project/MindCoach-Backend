@@ -23,7 +23,13 @@ public static class DependencyInjection
         ConfigurationManager configuration)
     {
         services.AddAuth(configuration)
-            .AddPersistance(configuration);
+            .AddPersistance(configuration)
+            .AddAppService();
+        return services;
+    }
+    public static IServiceCollection AddAppService(this IServiceCollection services)
+    {
+        services.AddScoped<ITaskService, TaskService>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         return services;
     }

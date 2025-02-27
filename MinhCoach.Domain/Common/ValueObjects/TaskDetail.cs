@@ -24,7 +24,12 @@ public class TaskDetail : ValueObject
         StartTime = startTime;
         EndTime = endTime;
     }
-    
+
+    public void UpdateStatus(
+        TaskStatuses status)
+    {
+        Status = status;
+    }
     public static TaskDetail Create(
         string title, 
         string? description, 
