@@ -58,7 +58,8 @@ public class TaskRepository : ITaskRepository
         
         if (status.HasValue)
              return await query.Where(t => 
-                    t.TaskDetail.Status == status.Value).ToListAsync();
+                    t.TaskDetail.Status == status.Value)
+                 .OrderBy(t => t.Timestamps.CreatedAt).ToListAsync();
         
         var result = await query.ToListAsync();
         
