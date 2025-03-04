@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinhCoach.Infra.Persistence;
 
@@ -11,9 +12,11 @@ using MinhCoach.Infra.Persistence;
 namespace MinhCoach.Infra.Migrations
 {
     [DbContext(typeof(MindCoachDbContext))]
-    partial class MindCoachDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250228071512_addCheckTaskRemiderAndTypeColumeForTemplate")]
+    partial class addCheckTaskRemiderAndTypeColumeForTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,11 +147,6 @@ namespace MinhCoach.Infra.Migrations
                     b.Property<string>("Username")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
-
-                    b.Property<int>("reminderOffset")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(5);
 
                     b.HasKey("Id");
 

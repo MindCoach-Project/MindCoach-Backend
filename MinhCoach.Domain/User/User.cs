@@ -14,6 +14,8 @@ public sealed class  User : Model<UserId, Guid>
     public string ImageUrl { get; private set; }
     public FullTimestamps Timestamps { get; private set; }
 
+    public int reminderOffset { get; private set; } = 5;
+
     public User(
         UserId id,
         string username, 

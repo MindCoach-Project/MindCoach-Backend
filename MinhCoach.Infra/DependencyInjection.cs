@@ -9,6 +9,7 @@ using MinhCoach.App.Common.Interfaces.Authentication;
 using MinhCoach.App.Common.Interfaces.Services;
 using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Infra.Authentication;
+using MinhCoach.Infra.BackgroundJobs;
 using MinhCoach.Infra.Persistence;
 using MinhCoach.Infra.Persistence.Interceptors;
 using MinhCoach.Infra.Persistence.Repositories;
@@ -25,12 +26,15 @@ public static class DependencyInjection
         services.AddAuth(configuration)
             .AddPersistance(configuration)
             .AddAppService();
+        services.AddHostedService<ReminderBackgroundService>();
+        
         return services;
     }
     public static IServiceCollection AddAppService(this IServiceCollection services)
     {
         services.AddScoped<ITaskService, TaskService>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
         return services;
     }
 
@@ -70,7 +74,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IDbInitializer, DbInitializer>();
         services.AddScoped<PublishDomainEventsInterceptor>();
-        
+
         var connectionString = configuration.GetConnectionString("Default");
         services.AddDbContext<MindCoachDbContext>(options =>
             options.UseMySql(

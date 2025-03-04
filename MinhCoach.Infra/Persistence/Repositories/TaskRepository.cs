@@ -123,10 +123,12 @@ public class TaskRepository : ITaskRepository
         var query = await _dbContext.Tasks
             .Include(t => t.SubTasks
                 .Where(t => t.Timestamps.DeletedAt == null &&
-                            t.TaskDetail.StartTime >= now))
+                            t.TaskDetail.StartTime >= now &&
+                            t.TaskDetail.StartTime.Date == now.Date))
             .Where(t => t.UserId == userId &&
                         t.Timestamps.DeletedAt == null &&
-                        t.TaskDetail.StartTime >= now).ToListAsync();
+                        t.TaskDetail.StartTime >= now &&
+                        t.TaskDetail.StartTime.Date == now.Date).ToListAsync();
         
         return query.SelectMany(t => t.SubTasks.Any()
                 ? t.SubTasks.Select(s => TaskEntity.ConvertSubTaskToTask(s, t.Priority))
@@ -135,6 +137,30 @@ public class TaskRepository : ITaskRepository
             .Take(3)
             .ToList();
     }
-    
-    
+
+    public async Task<List<TaskEntity>> GetTasksWithUpcomingRemindersAsync(DateTime now)
+    {
+        var notificationWindowMinutes = 120; 
+        
+        var tasks = await _dbContext.Tasks
+            .Include(t => t.SubTasks.OrderBy(t => t.TaskDetail.StartTime))
+            .Where(t => 
+                !t.IsReminderSent &&
+                t.Timestamps.DeletedAt == null &&
+                t.TemplateId == null &&
+                (
+                    t.SubTasks.Any(st => 
+                        !st.IsReminderSent &&
+                        st.TaskDetail.StartTime > now &&
+                        st.TaskDetail.StartTime <= now.AddMinutes(notificationWindowMinutes) 
+                    ) ||
+                    (t.SubTasks.Count == 0 &&
+                     t.TaskDetail.StartTime > now &&
+                     t.TaskDetail.StartTime <= now.AddMinutes(notificationWindowMinutes) )
+                )
+            )
+            .ToListAsync();
+
+        return tasks.OrderBy(t => t.TaskDetail.StartTime).ToList();
+    }
 } 

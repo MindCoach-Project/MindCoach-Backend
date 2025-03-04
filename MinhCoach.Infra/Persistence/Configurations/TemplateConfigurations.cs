@@ -43,6 +43,10 @@ public class TemplateConfigurations : IEntityTypeConfiguration<Template>
                 value => UserId.Create(value))
              .IsRequired(false);
         
+        builder.Property(x => x.Type)
+            .HasMaxLength(100)
+            .IsRequired(false);
+        
         builder.OwnsOne(m => m.Timestamps, timestamps =>
         {
             timestamps.Property(t => t.CreatedAt)

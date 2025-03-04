@@ -21,4 +21,6 @@ public interface ITaskRepository
     Task<List<TaskEntity>> GetTasksByWeekAsync(DateTime startOfWeek, DateTime endOfWeek, UserId userId);
 
     Task<List<TaskEntity>> GetUpcomingTasksTodayAsync(DateTime now, UserId userId);
+
+    Task<List<TaskEntity>> GetTasksWithUpcomingRemindersAsync(DateTime now);
 }

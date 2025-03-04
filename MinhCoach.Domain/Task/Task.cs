@@ -21,7 +21,12 @@ public sealed class Task : Model<TaskId, Guid>
     public TemplateId TemplateId { get; private set; }
     
     public List<SubTask.SubTask>? SubTasks { get; private set; }
-    
+    public bool IsReminderSent { get; private set; } = false;
+
+    public void MarkReminderSent()
+    {
+        IsReminderSent = true;
+    }
     public Task(
         TaskId id,
         TaskDetail taskDetail,

@@ -80,5 +80,9 @@ public class SubTaskConfigurations : IEntityTypeConfiguration<SubTask>
                 .HasColumnName(TimeColumnNames.DeletedAt.ToString()) 
                 .IsRequired(false);
         });
+        
+        builder.Property(t => t.IsReminderSent)
+            .HasDefaultValue(false)
+            .IsRequired();
     }
 }

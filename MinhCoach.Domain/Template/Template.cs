@@ -11,12 +11,14 @@ public sealed class Template : Model<TemplateId, Guid>
     public string Description { get; private set; }
     public bool IsPrivateTemplate { get; private set; }
     public FullTimestamps Timestamps { get; private set; }
+    
+    public string Type { get; private set; }
     public UserId? UserId { get; private set; }
 
 #pragma warning disable CS8618
     private Template()
     {
-
+        
     }
 #pragma warning disable CS8618
 }
