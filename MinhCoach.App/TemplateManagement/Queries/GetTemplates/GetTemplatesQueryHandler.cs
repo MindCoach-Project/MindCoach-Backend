@@ -31,7 +31,9 @@ public class GetTemplatesQueryHandler :
       //get system tempates
       var userId = _tokenService.GetUserIdFromToken();
    
-      var templates = await _unitOfWork.TemplateRepository.GetTemplates(userId != Guid.Empty ? UserId.Create(userId) : null);
+      var templates = await _unitOfWork.TemplateRepository.GetTemplates(
+          userId != Guid.Empty ? UserId.Create(userId) : null,
+          query.templateType);
       
       //get task and subtask in templates
       var getTemplatesResult = new List<GetTemplatesResult>();

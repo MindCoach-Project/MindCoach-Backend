@@ -27,9 +27,9 @@ public class TemplateManagementController : ApiController
     
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetTemplates()
+    public async Task<IActionResult> GetTemplates([FromQuery] string? templateType = null)
     {
-        var query = new GetTemplatesQuery();
+        var query = new GetTemplatesQuery(templateType);
         var taskResult = await _mediator.Send(query);
         return taskResult.Match(
             response => Ok(_mapper.Map<ApiResponse<List<TemplateResponse>>>(response)),

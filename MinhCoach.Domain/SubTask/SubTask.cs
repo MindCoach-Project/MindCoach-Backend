@@ -15,6 +15,13 @@ public sealed class SubTask : Model<SubTaskId, Guid>
     public FullTimestamps Timestamps { get; private set; }
     public TaskId TaskId { get; private set; }
     
+    public bool IsReminderSent { get; private set; } = false;
+
+    public void MarkReminderSent()
+    {
+        IsReminderSent = true;
+    }
+    
     public SubTask(
         SubTaskId id,
         TaskDetail taskDetail,

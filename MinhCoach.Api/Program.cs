@@ -1,4 +1,5 @@
 using MinhCoach.Api;
+using MinhCoach.Api.Hubs;
 using MinhCoach.App;
 using MinhCoach.Infra;
 using MinhCoach.Infra.Persistence;
@@ -32,5 +33,8 @@ var app = builder.Build();
     app.UseCors("AllowAll");
     
     app.MapControllers();
+    
+    app.MapHub<ReminderHub>("/reminderHub");
+    
     app.Run();
 }

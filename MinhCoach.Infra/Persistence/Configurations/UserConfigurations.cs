@@ -53,6 +53,10 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
             .HasDefaultValue("/images/users/default-user.png")
             .IsRequired();
         
+        builder.Property(m => m.reminderOffset)
+            .HasDefaultValue(5)
+            .IsRequired();
+        
         builder.OwnsOne(m => m.Timestamps, timestamps =>
         {
             timestamps.Property(t => t.CreatedAt)

@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MinhCoach.App\MinhCoach.App.csproj" />
-    <ProjectReference Include="..\MinhCoach.Infra\MinhCoach.Infra.csproj" />
+    <ProjectReference Include="..\MinhCoach.Infra\MinhCoach.Infra.csproj" />                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     <ProjectReference Include="..\MinhCoach.Contracts\MinhCoach.Contracts.csproj" />
   </ItemGroup>
 </Project>

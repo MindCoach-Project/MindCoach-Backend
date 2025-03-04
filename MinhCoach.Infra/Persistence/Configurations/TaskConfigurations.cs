@@ -94,5 +94,8 @@ public class TaskConfigurations : IEntityTypeConfiguration<Task>
                 .IsRequired(false);
         });
         
+        builder.Property(t => t.IsReminderSent)
+            .HasDefaultValue(false)
+            .IsRequired();
     }
 }

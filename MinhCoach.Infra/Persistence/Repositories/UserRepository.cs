@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.Domain.User;
+using MinhCoach.Domain.User.ValueObjects;
 
 namespace MinhCoach.Infra.Persistence.Repositories;
 
@@ -21,5 +22,10 @@ public class UserRepository : IUserRepository
     public async Task<User>? GetUserByEmail(string email)
     {
         return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<User?> GetUserById(UserId userId)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
     }
 }

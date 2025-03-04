@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MinhCoach.Api.Common.Errors;
 using MinhCoach.Api.Common.Mapping;
+using MinhCoach.Api.Hubs;
+using MinhCoach.App.Common.Interfaces.Services;
+using MinhCoach.Infra.Services;
 
 namespace MinhCoach.Api;
 
@@ -18,6 +21,10 @@ public static class DependencyInjection
         services.AddMappings();
 
         services.AddPolicyCors();
+
+        services.AddSignalR();
+
+        services.AddScoped<IReminderService, SignalRReminderService>();
         
         return services;
     }
@@ -27,9 +34,12 @@ public static class DependencyInjection
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAll",
-                policy => policy.AllowAnyOrigin()
+                policy => policy
+                    .SetIsOriginAllowed(origin => true)
                     .AllowAnyMethod()
-                    .AllowAnyHeader());
+                    .AllowAnyHeader()
+                    .AllowCredentials() 
+                );
         });
         
         return services;

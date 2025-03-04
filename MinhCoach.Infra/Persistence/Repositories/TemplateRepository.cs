@@ -20,7 +20,7 @@ public class TemplateRepository : ITemplateRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Template>> GetTemplates(UserId? userId)
+    public async Task<List<Template>> GetTemplates(UserId? userId, string templateType)
     {
         var query = _dbContext.Templates
             .Where(t => t.Timestamps.DeletedAt == null);
@@ -32,6 +32,8 @@ public class TemplateRepository : ITemplateRepository
         else
             query = query.Where(t => !t.IsPrivateTemplate);
 
+        if (!string.IsNullOrEmpty(templateType)) query = query.Where(t => t.Type == templateType);
+        
         return await query.ToListAsync();
     }
 
