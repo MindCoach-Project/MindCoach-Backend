@@ -14,7 +14,7 @@ public sealed class  User : Model<UserId, Guid>
     public string ImageUrl { get; private set; }
     public FullTimestamps Timestamps { get; private set; }
 
-    public int reminderOffset { get; private set; } = 5;
+    public int? reminderOffset { get; private set; } = 5;
 
     public User(
         UserId id,
@@ -41,7 +41,7 @@ public sealed class  User : Model<UserId, Guid>
     {
         var timestamps = new FullTimestamps(DateTime.UtcNow);
 
-        return new User(
+        var user = new User(
             UserId.CreateUnique(),
             username,
             null,
@@ -50,6 +50,17 @@ public sealed class  User : Model<UserId, Guid>
             password,
             null, 
             timestamps);
+        
+        user.UpdateReminderOffset(5);
+        
+        return user;
+    }
+
+    public void UpdateReminderOffset(int? reminderOffset = 5)
+    {
+        if (reminderOffset.HasValue) this.reminderOffset = reminderOffset;
+
+        Timestamps = Timestamps.UpdateTimestamp();
     }
 #pragma warning disable CS8618
     private User()

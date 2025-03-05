@@ -3,6 +3,7 @@ namespace MinhCoach.Contracts.RemiderManagement;
 public record RemiderMessage(
     string Title,
     DateTime StartTime,
+    DateTime NotifyTime,
     List<SubtaskMessage> SubtaskMessages
     
     );

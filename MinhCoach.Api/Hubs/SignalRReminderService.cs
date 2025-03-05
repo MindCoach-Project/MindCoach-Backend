@@ -27,7 +27,7 @@ public class SignalRReminderService : IReminderService
         Console.WriteLine($"Sending reminder to user {userId.Value} at {notifyTime}");
         Console.WriteLine($"-------------------------------------------------------");
         await _hubContext.Clients.Group(userId.Value.ToString())
-            .SendAsync("ReceiveReminder", _mapper.Map<RemiderMessage>(message));
+            .SendAsync("ReceiveReminder", _mapper.Map<RemiderMessage>((message, notifyTime)));
     }
 
 }
