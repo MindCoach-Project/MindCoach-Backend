@@ -19,6 +19,10 @@ public class UserRepository : IUserRepository
         await _dbContext.Users.AddAsync(user);
     }
 
+    public async Task Update(User user)
+    {
+        _dbContext.Users.Update(user);
+    }
     public async Task<User>? GetUserByEmail(string email)
     {
         return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == email);

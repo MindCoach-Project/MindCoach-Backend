@@ -12,5 +12,6 @@ public record TemplateResponse
     DateTime CreatedAt,
     DateTime? UpdatedAt,
     DateTime? DeletedAt,
+    string? Type,
     List<UnifiedTaskResponse>? UnifiedTasks
 );
