@@ -2,7 +2,7 @@ namespace MinhCoach.App.Common.Interfaces.Services;
 
 public interface IDateTimeProvider
 {
-    public DateTime Now => DateTime.Now;
+    public DateTime UtcNow => DateTime.UtcNow;
     
     (DateTime StartOfWeek, DateTime EndOfWeek) GetWeekRange(DateTime? date);
 

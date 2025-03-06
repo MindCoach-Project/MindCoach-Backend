@@ -38,7 +38,7 @@ public class TaskService  : ITaskService
                 t.TaskDetail.Title,
                 t.TaskDetail.Description,
                 _dateTimeProvider.GetNearestWeekday(t.TaskDetail.StartTime),
-                _dateTimeProvider.GetNearestWeekday(t.TaskDetail.StartTime));
+                _dateTimeProvider.GetNearestWeekday(t.TaskDetail.EndTime));
             taskDetail.UpdateStatus(t.TaskDetail.Status);
 
             var subTasks =  t.SubTasks.Select(s =>
@@ -47,7 +47,7 @@ public class TaskService  : ITaskService
                     s.TaskDetail.Title,
                     s.TaskDetail.Description,
                     _dateTimeProvider.GetNearestWeekday(s.TaskDetail.StartTime),
-                    _dateTimeProvider.GetNearestWeekday(s.TaskDetail.StartTime)
+                    _dateTimeProvider.GetNearestWeekday(s.TaskDetail.EndTime)
                 );
                 subTask.TaskDetail.UpdateStatus(s.TaskDetail.Status);
                 return subTask;
@@ -69,7 +69,7 @@ public class TaskService  : ITaskService
 
     public async Task<List<GetDailyTaskTrackingResult>> GetTasksTrackingByWeekAsync(UserId userId)
     {
-        var (startOfWeek, endOfWeek) = _dateTimeProvider.GetWeekRange(_dateTimeProvider.Now);
+        var (startOfWeek, endOfWeek) = _dateTimeProvider.GetWeekRange(_dateTimeProvider.UtcNow);
         
         var tasks = await _unitOfWork.TaskRepository.GetTasksByWeekAsync(startOfWeek, endOfWeek, userId);
 

@@ -4,11 +4,11 @@ namespace MinhCoach.Infra.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    DateTime Now { get; }
+    private DateTime UtcNow => DateTime.UtcNow;
     
     public (DateTime StartOfWeek, DateTime EndOfWeek) GetWeekRange(DateTime? date)
     {
-        date ??= Now;
+        date ??= UtcNow;
         var dayOfWeek = (int)date.Value.DayOfWeek;
         var startOfWeek = date.Value.Date.AddDays(dayOfWeek == 0 ? -6 : - (dayOfWeek - 1));
         var endOfWeek = startOfWeek.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -19,7 +19,7 @@ public class DateTimeProvider : IDateTimeProvider
     public DateTime GetNearestWeekday(DateTime date)
     {
         
-        var (startOfWeek, endOfWeek) = GetWeekRange(DateTime.Now);
+        var (startOfWeek, endOfWeek) = GetWeekRange(this.UtcNow);
 
         int daysOffset = ((int)date.DayOfWeek - (int)startOfWeek.DayOfWeek + 7) % 7;
         

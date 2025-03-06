@@ -12,8 +12,8 @@ using MinhCoach.Infra.Persistence;
 namespace MinhCoach.Infra.Migrations
 {
     [DbContext(typeof(MindCoachDbContext))]
-    [Migration("20250228071512_addCheckTaskRemiderAndTypeColumeForTemplate")]
-    partial class addCheckTaskRemiderAndTypeColumeForTemplate
+    [Migration("20250306032911_addUserTaskSubtTaskTemplateTablesToDb")]
+    partial class addUserTaskSubtTaskTemplateTablesToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,6 +147,12 @@ namespace MinhCoach.Infra.Migrations
                     b.Property<string>("Username")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int?>("reminderOffset")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(5);
 
                     b.HasKey("Id");
 

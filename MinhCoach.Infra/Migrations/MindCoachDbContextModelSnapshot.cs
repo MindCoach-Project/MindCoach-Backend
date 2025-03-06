@@ -145,7 +145,8 @@ namespace MinhCoach.Infra.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("reminderOffset")
+                    b.Property<int?>("reminderOffset")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(5);
