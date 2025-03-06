@@ -4,6 +4,7 @@ using MinhCoach.App.TaskManagement.Commands.CreateTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteSubTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteTask;
 using MinhCoach.App.TaskManagement.Commands.UpdateTask;
+using MinhCoach.App.TaskManagement.Common;
 using MinhCoach.App.TaskManagement.DomainModels;
 using MinhCoach.App.TaskManagement.Queries.GetTaskById;
 using MinhCoach.App.TaskManagement.Queries.GetTasksByDate;
@@ -116,5 +117,7 @@ public class TaskManagementMappingConfig : IRegister
             .Map(d => d.CreatedAt, s => s.Timestamps.CreatedAt)
             .Map(d => d.UpdatedAt, s => s.Timestamps.UpdatedAt)
             .Map(d => d.DeletedAt, s => s.Timestamps.DeletedAt);
+
+        config.NewConfig<GetDailyTaskTrackingResult, DailyTaskTrackingResponse>();
     }
 }

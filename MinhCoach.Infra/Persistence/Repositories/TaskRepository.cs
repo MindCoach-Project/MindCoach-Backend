@@ -163,4 +163,12 @@ public class TaskRepository : ITaskRepository
 
         return tasks.OrderBy(t => t.TaskDetail.StartTime).ToList();
     }
+
+    public async Task<List<TaskEntity>> GetTasksForCurrentWeekAsync(DateTime startOfWeek, DateTime endOfWeek)
+    {
+        return await _dbContext.Tasks
+            .Where(t => t.TaskDetail.StartTime.Date >= startOfWeek.Date && 
+                t.TaskDetail.StartTime.Date <= endOfWeek.Date)
+            .ToListAsync();
+    }
 } 

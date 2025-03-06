@@ -1,7 +1,10 @@
+using System.Globalization;
 using System.Runtime.InteropServices.JavaScript;
 using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Interfaces.Services;
 using ErrorOr;
+using MinhCoach.App.TaskManagement.Common;
+using MinhCoach.Domain.Common.Enums;
 using MinhCoach.Domain.Common.ValueObjects;
 using MinhCoach.Domain.SubTask;
 using MinhCoach.Domain.Template;
@@ -13,8 +16,7 @@ public class TaskService  : ITaskService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDateTimeProvider _dateTimeProvider;
-
-
+    private ITaskService _taskServiceImplementation;
     public TaskService(
         IUnitOfWork unitOfWork,
         IDateTimeProvider dateTimeProvider)
@@ -63,5 +65,25 @@ public class TaskService  : ITaskService
         await _unitOfWork.SaveChangesAsync();    
         
         return tasks;
+    }
+
+    public async Task<List<GetDailyTaskTrackingResult>> GetTasksTrackingByWeekAsync(UserId userId)
+    {
+        var (startOfWeek, endOfWeek) = _dateTimeProvider.GetWeekRange(_dateTimeProvider.Now);
+        
+        var tasks = await _unitOfWork.TaskRepository.GetTasksByWeekAsync(startOfWeek, endOfWeek, userId);
+
+        var dailyTasks = tasks
+            .GroupBy(t => t.TaskDetail.StartTime.Date)
+            .OrderBy(g => g.Key)
+            .Select(g => new GetDailyTaskTrackingResult(
+                CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(g.Key.DayOfWeek),
+                g.Count(t => t.TaskDetail.Status == TaskStatuses.Todo),
+                g.Count(t => t.TaskDetail.Status == TaskStatuses.Inprogress),
+                g.Count(t => t.TaskDetail.Status == TaskStatuses.Done)
+            ))
+            .ToList();
+        
+        return dailyTasks;
     }
 }
