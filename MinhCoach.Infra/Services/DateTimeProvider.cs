@@ -4,7 +4,6 @@ namespace MinhCoach.Infra.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    private IDateTimeProvider _dateTimeProviderImplementation;
     DateTime Now { get; }
     
     public (DateTime StartOfWeek, DateTime EndOfWeek) GetWeekRange(DateTime? date)

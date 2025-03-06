@@ -7,10 +7,12 @@ using MinhCoach.App.TaskManagement.Commands.CreateTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteSubTask;
 using MinhCoach.App.TaskManagement.Commands.DeleteTask;
 using MinhCoach.App.TaskManagement.Commands.UpdateTask;
+using MinhCoach.App.TaskManagement.Common;
 using MinhCoach.App.TaskManagement.Queries.GetTaskById;
 using MinhCoach.App.TaskManagement.Queries.GetTasksByDate;
 using MinhCoach.App.TaskManagement.Queries.GetTasksByWeek;
 using MinhCoach.App.TaskManagement.Queries.GetUpcomingTasks;
+using MinhCoach.App.TaskManagement.Queries.GetWeeklyTaskTracking;
 using MinhCoach.Contracts.TaskManagement;
 
 namespace MinhCoach.Api.Controllers;
@@ -106,6 +108,15 @@ public class TaskManagementController : ApiController
         var taskResult = await _mediator.Send(query);
         return taskResult.Match(
             response => Ok(_mapper.Map<ApiResponse<List<TaskResponse>>>(response)),
+            errors=> Problem(errors));
+    }
+    [HttpGet("weekly-task-tracking")]
+    public async Task<IActionResult> GetWeeklyTaskTracking()
+    {
+        var query = new GetWeeklyTaskTrackingQuery();
+        var taskResult = await _mediator.Send(query);
+        return taskResult.Match(
+            response => Ok(_mapper.Map<ApiResponse<List<DailyTaskTrackingResponse>>>(response)),
             errors=> Problem(errors));
     }
 }

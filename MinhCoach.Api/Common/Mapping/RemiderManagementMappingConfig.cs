@@ -1,7 +1,5 @@
 using Mapster;
-using MinhCoach.App.TemplateManagement.Common;
 using MinhCoach.Contracts.RemiderManagement;
-using MinhCoach.Contracts.TemplateManagement;
 using Task = MinhCoach.Domain.Task.Task;
 namespace MinhCoach.Api.Common.Mapping;
 
