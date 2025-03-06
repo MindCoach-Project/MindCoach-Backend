@@ -15,7 +15,7 @@ public class BaseTimestamps : ValueObject
 
     public BaseTimestamps UpdateTimestamp()
     {
-        return new BaseTimestamps(CreatedAt, DateTime.Now);
+        return new BaseTimestamps(CreatedAt, DateTime.UtcNow);
     }
     
     public override IEnumerable<object> GetEqualityComponents()

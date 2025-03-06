@@ -35,7 +35,7 @@ public class ReminderBackgroundService : BackgroundService
         var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
         var reminderService = scope.ServiceProvider.GetRequiredService<IReminderService>();
 
-        var currentTime = _dateTimeProvider.Now;
+        var currentTime = _dateTimeProvider.UtcNow;
         var tasksToNotify = await unitOfWork.TaskRepository.GetTasksWithUpcomingRemindersAsync(currentTime);
         foreach (var task in tasksToNotify)
         {
@@ -73,7 +73,7 @@ public class ReminderBackgroundService : BackgroundService
             {
                 await unitOfWork.TaskRepository.UpdateAsync(task);
                 await unitOfWork.SaveChangesAsync();
-                await reminderService.SendReminderAsync(task.UserId, task, _dateTimeProvider.Now);
+                await reminderService.SendReminderAsync(task.UserId, task, _dateTimeProvider.UtcNow);
             }
         }
     }
