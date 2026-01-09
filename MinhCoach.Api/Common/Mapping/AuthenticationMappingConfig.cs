@@ -11,10 +11,15 @@ public class AuthenticationMappingConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<RegisterRequest, RegisterCommand>();
+        
         config.NewConfig<LoginRequest, LoginQuery>();
+        
         config.NewConfig<AuthenticationResult, AuthenticationResponse>()
             .Map(d => d.Token, s => s.Token)
             .Map(d => d.Id, s => s.User.Id.Value)
+            .Map(d => d.CreatedAt, s => s.User.Timestamps.CreatedAt)
+            .Map(d => d.UpdatedAt, s => s.User.Timestamps.UpdatedAt)
+            .Map(d => d.DeletedAt, s => s.User.Timestamps.DeletedAt)
             .Map(d => d, s => s.User);
     }
 }

@@ -1,10 +1,14 @@
-using MinhCoach.Domain.Models;
 using MinhCoach.Domain.User;
+using MinhCoach.Domain.User.ValueObjects;
 
-namespace MinhCoach.App.Common.Persistence;
+namespace MinhCoach.App.Common.Interfaces.Persistence;
 
 public interface IUserRepository
 {
-    void Add(User user);
-    User? GetUserByEmail(string email);
+    Task Add(User user);
+    Task<User?> GetUserByEmail(string email);
+    
+    Task<User?> GetUserById(UserId userId);
+
+    Task Update(User user);
 }

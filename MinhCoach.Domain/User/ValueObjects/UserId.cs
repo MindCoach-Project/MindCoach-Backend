@@ -1,6 +1,6 @@
 using MinhCoach.Domain.Common.Models;
 
-namespace MinhCoach.Domain.Models.ValueObjects;
+namespace MinhCoach.Domain.User.ValueObjects;
 
 public class UserId : ModelId<Guid>
 {

@@ -2,12 +2,9 @@
 **/bin/
 **/obj/
 **/*.csproj.lock
-./MinhCoach.Api/appsettings.json
-./MinhCoach.Api/appsettings.Development.json
-./MinhCoach.Api/appsettings.Production.json
-./MinhCoach.Api/appsettings.Staging.json
+**/appsettings.*.json
+!**/appsettings.json
 # Ignore solution files
-*.sln
 *.user
 *.suo
 

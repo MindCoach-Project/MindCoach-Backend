@@ -2,41 +2,49 @@ using ErrorOr;
 using MediatR;
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
+using MinhCoach.App.Common.Interfaces.Persistence;
 using MinhCoach.App.Common.Errors;
-using MinhCoach.Domain.Models;
+using MinhCoach.App.Common.Response;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.App.Authentication.Queries.Login;
 
 public class LoginQueryHandler :
-    IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
+    IRequestHandler<LoginQuery, ErrorOr<ObjectResponse<AuthenticationResult>>>
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IUserRepository _userRepository;
-    public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IUnitOfWork _unitOfWork;
+    public LoginQueryHandler(
+        IJwtTokenGenerator jwtTokenGenerator, 
+        IPasswordHasher passwordHasher,
+        IUnitOfWork unitOfWork)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
-        _userRepository = userRepository;
+        _passwordHasher = passwordHasher;
+        _unitOfWork = unitOfWork;
     }
     
-    public async Task<ErrorOr<AuthenticationResult>> Handle(
+    public async Task<ErrorOr<ObjectResponse<AuthenticationResult>>> Handle(
         LoginQuery query, 
         CancellationToken cancellationToken)
     {
         //validate the user exists
-        if (_userRepository.GetUserByEmail(query.Email) is not User user)
+        if (await _unitOfWork.UserRepository.GetUserByEmail(query.Email) is not User user)
             return Errors.Authentication.InvalidCredentials;
-        
+
         //validate the password is correct
-        if (user.Password != query.Password)
+        if (!_passwordHasher.VerifyPassword(query.Password, user.Password))
             return Errors.Authentication.InvalidCredentials;
         
         //create jwt token
         var token = _jwtTokenGenerator.GenerateToken(user);
         
-        return new AuthenticationResult(
-            user,
-            token);
+        return new ObjectResponse<AuthenticationResult>(
+            "Login successful, welcome back!", 
+             new AuthenticationResult(
+                user,
+                token)
+            );
     }
 }

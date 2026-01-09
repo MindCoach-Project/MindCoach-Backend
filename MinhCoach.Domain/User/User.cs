@@ -1,42 +1,66 @@
 using MinhCoach.Domain.Common.Models;
-using MinhCoach.Domain.Models.ValueObjects;
+using MinhCoach.Domain.Common.ValueObjects;
+using MinhCoach.Domain.User.ValueObjects;
 
 namespace MinhCoach.Domain.User;
 
-public sealed class User : Model<UserId, Guid>
+public sealed class  User : Model<UserId, Guid>
 {
-    public string FirstName { get;set; }
-    public string LastName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    
+    public string Username { get; private set; }
+    public string Phone { get; private set; }
+    public string Address { get; private set; }
+    public string Email { get; private set; }
+    public string Password { get; private set; }
+    public string ImageUrl { get; private set; }
+    public FullTimestamps Timestamps { get; private set; }
+
+    public int? reminderOffset { get; private set; } = 5;
+
     public User(
-        UserId id, 
+        UserId id,
+        string username, 
+        string phone, 
+        string address, 
         string email, 
         string password, 
-        string lastName, 
-        string firstName)
-        : base(id)
+        string imageUrl,
+        FullTimestamps timestamps) : base(id)
     {
+        Username = username;
+        Phone = phone;
+        Address = address;
         Email = email;
         Password = password;
-        LastName = lastName;
-        FirstName = firstName;
+        ImageUrl = imageUrl;
+        Timestamps = timestamps;
     }
-    
     public static User Create(
-        string email,
-        string password,
-        string lastName,
-        string firstName)
+        string username, 
+        string email, 
+        string password)
     {
-        return new(
+        var timestamps = new FullTimestamps(DateTime.UtcNow);
+
+        var user = new User(
             UserId.CreateUnique(),
+            username,
+            null,
+            null,
             email,
             password,
-            lastName,
-            firstName
-        );
+            null, 
+            timestamps);
+        
+        user.UpdateReminderOffset(5);
+        
+        return user;
+    }
+
+    public void UpdateReminderOffset(int? reminderOffset = 5)
+    {
+        if (reminderOffset.HasValue) this.reminderOffset = reminderOffset;
+
+        Timestamps = Timestamps.UpdateTimestamp();
     }
 #pragma warning disable CS8618
     private User()

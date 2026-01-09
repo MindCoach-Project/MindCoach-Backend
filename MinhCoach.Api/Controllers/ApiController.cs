@@ -16,11 +16,15 @@ public class ApiController : ControllerBase
             return Problem();
         }
 
-        if (errors.All(error => error.Type == ErrorType.Validation))
+        if (errors.All(e => 
+                e.Type == ErrorType.Validation &&
+                (e.Metadata != null && 
+                 e.Metadata.TryGetValue("IsValidationError", out var isValidation) 
+                    ? (bool)isValidation : true)))
         {
             return ValidationProblem(errors);
         }
-
+        
         var firstError = errors[0];
         HttpContext.Items[HttpContextItemKeys.Errors] = errors;
         return Problem(firstError);
@@ -32,6 +36,7 @@ public class ApiController : ControllerBase
             ErrorType.Conflict => StatusCodes.Status409Conflict,
             ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
             _ => StatusCodes.Status500InternalServerError,
         };
 

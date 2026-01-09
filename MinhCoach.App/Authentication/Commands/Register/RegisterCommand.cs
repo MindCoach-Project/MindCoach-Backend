@@ -1,12 +1,13 @@
 using MediatR;
 using ErrorOr;
 using MinhCoach.App.Authentication.Common;
+using MinhCoach.App.Common.Response;
 
 namespace MinhCoach.App.Authentication.Commands.Register;
 
 public record RegisterCommand(
-    string FirstName,
-    string LastName,
+    string Username,
     string Email,
-    string Password
-    ) : IRequest<ErrorOr<AuthenticationResult>>;
+    string Password,
+    string ConfirmPassword
+    ) : IRequest<ErrorOr<ObjectResponse<AuthenticationResult>>>;

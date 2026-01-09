@@ -2,47 +2,60 @@ using MediatR;
 using ErrorOr;
 using MinhCoach.App.Authentication.Common;
 using MinhCoach.App.Common.Interfaces.Authentication;
-using MinhCoach.App.Common.Persistence;
-using MinhCoach.Domain.Errors;
-using MinhCoach.Domain.Models;
+using MinhCoach.App.Common.Interfaces.Persistence;
+using MinhCoach.App.Common.Response;
+using MinhCoach.Domain.Common.Errors;
 using MinhCoach.Domain.User;
 
 namespace MinhCoach.App.Authentication.Commands.Register;
 
 public class RegisterCommandHandler :
-    IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
+    IRequestHandler<RegisterCommand, ErrorOr<ObjectResponse<AuthenticationResult>>>
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IUserRepository _userRepository;
-    public RegisterCommandHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IUnitOfWork _unitOfWork;
+    public RegisterCommandHandler(
+        IJwtTokenGenerator jwtTokenGenerator, 
+        IPasswordHasher passwordHasher,
+        IUnitOfWork unitOfWork)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
-        _userRepository = userRepository;
+        _passwordHasher = passwordHasher;
+        _unitOfWork = unitOfWork;
     }
     
-    public async Task<ErrorOr<AuthenticationResult>> Handle(
+    public async Task<ErrorOr<ObjectResponse<AuthenticationResult>>> Handle(
         RegisterCommand command,
         CancellationToken cancellationToken)
     {   
         //check if user already exists
-        if (_userRepository.GetUserByEmail(command.Email) is not null)
+        if (await _unitOfWork.UserRepository.GetUserByEmail(command.Email) is not null){
             return Errors.User.DuplicateEmail;
-
+        }
+        
+        //hash password
+        string hashedPassword  = _passwordHasher.HashPassword(command.Password); 
+        
         //create user
         var user = User.Create(
+            command.Username,
             command.Email, 
-            command.Password,
-            command.LastName,
-            command.FirstName);
-        
-        _userRepository.Add(user);
+            hashedPassword
+            );
+
+        await _unitOfWork.UserRepository.Add(user);
+        await _unitOfWork.SaveChangesAsync();
         
         //create jwt token
         string token = _jwtTokenGenerator.GenerateToken(user);
         
-        return new AuthenticationResult(
-            user,
-            token);
+        return new ObjectResponse<AuthenticationResult>(
+            "Registration successful, please confirm your email.", 
+            new AuthenticationResult(
+                user,
+                token)
+        );
     }
 
 }
